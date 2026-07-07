@@ -755,7 +755,7 @@ const faqs = [
       }
       .hero h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); margin: 4px 0 0; }
       .lede { font-size: clamp(1rem, 2vw, 1.16rem); color: var(--ink-soft); max-width: 38ch; margin: 12px 0 14px; }
-      .hero-copy { max-width: 34rem; }
+      .hero-copy { max-width: 34rem; padding-top: 4px; }
       .hero-footer { display: grid; gap: 12px; justify-items: start; }
       .hero-chips { gap: 8px; }
       .hero-chips .chip { font-size: 0.8rem; padding: 6px 10px; }
@@ -779,10 +779,10 @@ const faqs = [
 
       /* ---------- check form ---------- */
       .check { scroll-margin-top: 96px; }
-      .hero-check { margin-top: 0; }
+      .hero-check { margin-top: 0; padding: 0; }
       .check-grid { display: grid; gap: 16px; align-items: start; }
       @media (min-width: 1280px) { .check-grid { grid-template-columns: minmax(0, 1.22fr) minmax(260px, 0.78fr); } }
-      .check-form { display: grid; gap: 14px; padding: 18px; }
+      .check-form { display: grid; gap: 14px; padding: 14px 18px 18px; }
       .form-step { display: grid; gap: 14px; }
       .form-step.step2 { border-top: 1.5px dashed var(--line); padding-top: 22px; }
       .step-label { margin: 0; font-size: 0.85rem; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: baseline; gap: 10px; }
