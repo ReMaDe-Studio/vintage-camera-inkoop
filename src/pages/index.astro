@@ -98,7 +98,7 @@ const faqs = [
     <main id="top">
       <!-- ============ HERO ============ -->
       <section class="hero">
-        <div class="wrap hero-grid">
+        <div class="wrap hero-copy-wrap">
           <div class="hero-copy">
             <span class="eyebrow">
               <span aria-hidden="true">◍</span> Digitale compactcamera’s · 2000–2012
@@ -111,8 +111,149 @@ const faqs = [
             </p>
             
             <!-- ============ CAMERA CHECK FORM ============ -->
-            <section id="check" class="check">
+            <div class="check">
               <div class="check-grid">
+                <form id="cameraForm" class="card check-form" novalidate>
+                  <!-- ---------- STAP 1 ---------- -->
+                  <div class="form-step">
+                    <p class="step-label"><b>Stap 1</b> · Model & staat <span class="step-time">± 1 minuut</span></p>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <span>Merk</span>
+                        <select name="merk">
+                          <option value="" disabled selected>Kies een merk…</option>
+                          {BRANDS.map((b) => <option value={b}>{b}</option>)}
+                        </select>
+                      </label>
+
+                      <label class="field">
+                        <span>Modelnaam</span>
+                        <input type="text" name="model" placeholder="bv. IXUS 70" autocomplete="off" />
+                      </label>
+                    </div>
+
+                    <label class="field">
+                      <span>Kleur</span>
+                      <select name="kleur">
+                        <option value="" disabled selected>Kies een kleur…</option>
+                        {COLORS.map((c) => <option value={c}>{c}</option>)}
+                      </select>
+                      <input type="text" id="kleurOverig" placeholder="Welke kleur?" autocomplete="off" hidden />
+                    </label>
+
+                    <fieldset class="field">
+                      <legend>Wat is de staat?</legend>
+                      <div class="segmented wrap-seg" data-name="staat">
+                        <button type="button" data-val="netjes">Werkend, zeer netjes</button>
+                        <button type="button" data-val="gebruikt">Werkend, gebruikssporen</button>
+                        <button type="button" data-val="ongetest">Ongetest / weet ik niet</button>
+                        <button type="button" data-val="defect">Defect of schade</button>
+                      </div>
+                    </fieldset>
+
+                    <div class="field-row three">
+                      <fieldset class="field">
+                        <legend>Batterij erbij?</legend>
+                        <div class="segmented sm" data-name="batterij">
+                          <button type="button" data-val="ja">Ja</button>
+                          <button type="button" data-val="nee">Nee</button>
+                          <button type="button" data-val="?">?</button>
+                        </div>
+                      </fieldset>
+
+                      <fieldset class="field">
+                        <legend>Lader erbij?</legend>
+                        <div class="segmented sm" data-name="lader">
+                          <button type="button" data-val="ja">Ja</button>
+                          <button type="button" data-val="nee">Nee</button>
+                          <button type="button" data-val="?">?</button>
+                        </div>
+                      </fieldset>
+
+                      <fieldset class="field">
+                        <legend>Originele doos?</legend>
+                        <div class="segmented sm two" data-name="doos">
+                          <button type="button" data-val="ja">Ja</button>
+                          <button type="button" data-val="nee">Nee</button>
+                        </div>
+                      </fieldset>
+                    </div>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <span>Foto’s toevoegen</span>
+                        <div class="dropzone">
+                          <input type="file" name="foto" accept="image/*" multiple />
+                          <div class="dropzone-inner">
+                            <span class="plus">+</span>
+                            <span>Klik of sleep foto’s hier</span>
+                            <span class="hint">Max 10MB per foto</span>
+                          </div>
+                        </div>
+                        <div class="photo-previews"></div>
+                      </label>
+                    </div>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <span>Naam</span>
+                        <input type="text" name="naam" placeholder="Jouw naam" autocomplete="off" />
+                      </label>
+
+                      <label class="field">
+                        <span>Telefoonnummer</span>
+                        <input type="tel" name="telefoon" placeholder="06 12345678" autocomplete="off" />
+                      </label>
+                    </div>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <span>E-mailadres</span>
+                        <input type="email" name="email" placeholder="jouw@email.nl" autocomplete="off" />
+                      </label>
+                    </div>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <span>Extra informatie</span>
+                        <textarea name="extra" placeholder="Eventuele opmerkingen..." rows="3"></textarea>
+                      </label>
+                    </div>
+
+                    <div class="field-row">
+                      <label class="field">
+                        <input type="checkbox" name="privacy" required />
+                        <span>Ik ga akkoord met de <a href="/privacy" target="_blank">privacyvoorwaarden</a></span>
+                      </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full">Verstuur aanvraag</button>
+
+                    <p class="privacy-note">
+                      Door te versturen geef je toestemming om je gegevens te verwerken volgens de
+                      <a href="/privacy" target="_blank">privacyverklaring</a>.
+                    </p>
+                  </div>
+                </form>
+
+                <!-- ============ ESTIMATE PANEL ============ -->
+                <div class="card estimate" id="estimatePanel">
+                  <div class="eyebrow">DIRECTE INKOOPINDICATIE</div>
+                  <div class="estimate-body">
+                    <p class="estimate-empty">
+                      Vul merk, model en de staat in — dan verschijnt hier meteen een grove inkoop-indicatie.
+                    </p>
+                    <p class="estimate-disclaimer">
+                      Dit is een grove schatting. De definitieve prijs bepalen we na onze check.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
                 <form id="cameraForm" class="card check-form" novalidate>
                   <!-- ---------- STAP 1 ---------- -->
                   <div class="form-step">
@@ -789,20 +930,20 @@ const faqs = [
       @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
       .step { position: relative; }
       .step-num { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-ink); font-family: var(--font-mono); font-weight: 700; margin-bottom: 14px; }
-      .step-num.num-2 { background: var(--pop-coral-soft); color: var(--pop-coral-ink); }
-      .step-num.num-3 { background: var(--pop-cerulean-soft); color: var(--pop-cerulean-ink); }
-      .step h3 { font-size: 1.15rem; }
-      .step p { color: var(--ink-soft); margin: 8px 0 0; }
-
-      /* ---------- intro ---------- */
-      .intro-card { display: flex; gap: 18px; align-items: flex-start; max-width: 720px; }
-      .intro-avatar { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); border: 1.5px dashed var(--accent-ink); }
-      .intro-card h2 { font-size: 1.25rem; margin-bottom: 8px; }
-      .intro-card p { color: var(--ink-soft); margin: 0; }
-
+      /* ---------- hero ---------- */
+      .hero { padding-top: 40px; }
+      .hero-copy-wrap { display: grid; gap: 40px; align-items: start; }
+      @media (min-width: 900px) { .hero-copy-wrap { grid-template-columns: 1fr 1fr; gap: 56px; } .hero { padding-top: 64px; } }
+      .hero h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); margin: 4px 0 0; }
+      .lede { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--ink-soft); max-width: 40ch; margin: 18px 0 26px; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+      .hero-chips { gap: 8px; }
+      .hero-chips .chip { font-size: 0.82rem; padding: 7px 12px; }
+      .hero-honest { margin-top: 22px; padding: 16px 18px; background: #fff; border: 1px dashed var(--line); border-radius: var(--radius); font-size: 0.92rem; color: var(--ink-soft); max-width: 46ch; }
+      
       /* ---------- check form ---------- */
       .check-grid { display: grid; gap: 24px; align-items: start; }
-      @media (min-width: 960px) { .check-grid { grid-template-columns: 1.6fr 0.9fr; } }
+      @media (min-width: 960px) { .check-grid { grid-template-columns: 1fr 0.9fr; } }
       .check-form { display: grid; gap: 20px; }
       .form-step { display: grid; gap: 20px; }
       .form-step.step2 { border-top: 1.5px dashed var(--line); padding-top: 22px; }
