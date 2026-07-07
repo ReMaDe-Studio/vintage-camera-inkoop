@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "wrangler:dev": "npx wrangler dev --port 8788"
   },
   "dependencies": {
     "astro": "^4.15.0"

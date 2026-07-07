@@ -42,11 +42,62 @@ Zoek op `[jouw naam]`, `31600000000` en "placeholder" in de code — dit staat e
 | Bedrijfs-/privacygegevens | footer-legal + privacy-link (`#privacy`) | onderaan index.astro |
 | Echte productfoto's | fotostrip toont nu illustratieve SVG-camera's | `stripCams` array in index.astro, zie hieronder |
 
-Er is geen backend: het formulier logt de aanvraag naar de browserconsole en
-toont een bedankt-scherm, maar verstuurt niets. Voordat dit live gaat moet er
-een manier komen om aanvragen (incl. foto's) echt bij jou te krijgen — opties:
-een formulierdienst (Formspree, Web3Forms), of e-mail/webhook via een simpele
-serverless functie.
+> **Bijgewerkt**: er is inmiddels wél een backend (Cloudflare Worker + R2), zie
+> de sectie "Deployment" hieronder. De regel hierboven over "geen backend" in
+> een eerdere versie van dit document klopt niet meer.
+
+## Deployment (Cloudflare Worker + R2)
+
+De site draait als een **Cloudflare Worker met static assets** (niet Cloudflare
+Pages) op `https://vintage-camera-inkoop2.f-p-yousfi.workers.dev/`. Formulier-
+inzendingen (incl. foto's) worden opgeslagen in de R2-bucket `camera-uploads`.
+
+**Bug gevonden en gefixt (2026-07-08)**: `functions/api/*.js` gebruikt de
+Cloudflare **Pages Functions**-conventie (bestandsnaam-gebaseerde routing,
+`onRequestPost`/`onRequestGet`). Die conventie werkt alléén op Cloudflare
+Pages — een Worker-met-assets leest die map niet automatisch, dus
+`/api/submit`, `/api/inzendingen-7kq4m9` en `/api/foto-7kq4m9` gaven 404 op de
+live URL, terwijl de homepage (static assets) wél werkte.
+
+**Fix**: [src/worker.js](src/worker.js) is de nieuwe Worker-entrypoint
+(`main` in [wrangler.toml](wrangler.toml)). Hij routeert handmatig naar de
+bestaande handlers in `functions/api/*.js` (die blijven ongewijzigd en zijn nu
+gewoon geïmporteerde functies, geen framework-magie meer) en valt voor al het
+overige terug op `env.ASSETS.fetch(request)` om de gebouwde site te serveren.
+`wrangler.toml` kreeg een `binding = "ASSETS"` zodat de Worker die fallback
+kan aanroepen.
+
+Getest lokaal met `wrangler dev` (Miniflare, gesimuleerde R2 — raakt de echte
+bucket niet aan): formulier-submit, dashboard-lijst en foto-proxy werken alle
+drie end-to-end. Zie `npm run wrangler:dev` (draait op poort 8788).
+
+**Nog te doen door jou (ik kan dit niet vanaf hier uitvoeren):**
+
+1. **Deployen**: `wrangler` is hier niet ingelogd. Run lokaal:
+   ```
+   cd vintage-camera-inkoop
+   npx wrangler login          # eenmalig, opent browser
+   npm run build
+   npx wrangler deploy
+   ```
+   Daarna zou `/api/inzendingen-7kq4m9` en het formulier moeten werken op de
+   live URL.
+2. **⚠️ Beveiligingsissue — GitHub-token in git remote**: `git remote -v` toont
+   een Personal Access Token in platte tekst in de origin-URL
+   (`https://ghp_...@github.com/...`). Dat token staat lokaal in `.git/config`
+   op deze machine. Aanbevolen: vervang de remote door een SSH-URL of een
+   credential helper, en **roteer dit token** in GitHub (Settings → Developer
+   settings → Personal access tokens) aangezien het nu in leesbare vorm heeft
+   rondgezworven. Ik heb het zelf niet aangepast omdat een remote-wijziging
+   je push-toegang kan beïnvloeden.
+3. **Dashboard heeft geen beveiliging** — `/api/inzendingen-7kq4m9` is alleen
+   verborgen via een niet-geraden URL, niet echt afgeschermd. Bevat namen,
+   telefoonnummers, e-mailadressen en foto's van aanvragers. Overweeg
+   basic-auth (wachtwoord via een Worker secret/env var) voordat dit met
+   substantieel verkeer live gaat.
+4. `.wrangler/` (lokale Miniflare-state van `wrangler dev`) staat nu in
+   `.gitignore` — was dat nog niet en zou anders lokale testdata in de repo
+   hebben laten belanden.
 
 ## Architectuur
 
@@ -119,7 +170,6 @@ indicatie is.
 
 ## Bekende, bewuste keuzes (niet per ongeluk zo)
 
-- Geen backend/opslag — frontend-only, zie boven.
 - Verkoopwaarde wordt nergens getoond, alleen inkoop — bewuste business-keuze.
 - Waarschuwingen/defect-meldingen zijn amber, niet roze — roze is uitsluitend
   voor positieve/actie-elementen, amber voor "let op".
