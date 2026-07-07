@@ -1,6 +1,9 @@
 name = "vintage-camera-inkoop"
 compatibility_date = "2024-01-01"
 
+[assets]
+directory = "./dist"
+
 [[r2_buckets]]
 binding = "camera_uploads"
 bucket_name = "camera-uploads"
