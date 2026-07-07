@@ -1,20 +1,8 @@
-// Pages Function: GET /api/admin
+// Pages Function: GET /api/inzendingen-7kq4m9
 // Dashboard om inzendingen uit R2 te bekijken.
-// Beveiligd met een ADMIN_KEY uit env (Cloudflare Pages secrets).
+// Simpel verborgen pad, niet linken op de site.
 
 export async function onRequestGet({ request, env }) {
-  const url = new URL(request.url);
-  const key = url.searchParams.get('key');
-
-  // Controleer toegang
-  const adminKey = env.ADMIN_KEY;
-  if (adminKey && key !== adminKey) {
-    return new Response('Niet geautoriseerd. Voeg ?key=... toe.', {
-      status: 401,
-      headers: { 'Content-Type': 'text/plain' }
-    });
-  }
-
   // Haal alle inzendingen op uit R2
   const submissions = [];
 
@@ -76,7 +64,7 @@ export async function onRequestGet({ request, env }) {
   submissions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   // Bouw HTML
-  const html = buildDashboard(submissions, !!adminKey, url.pathname);
+  const html = buildDashboard(submissions);
 
   return new Response(html, {
     status: 200,
@@ -84,20 +72,20 @@ export async function onRequestGet({ request, env }) {
   });
 }
 
-function buildDashboard(submissions, hasAdminKey, pathname) {
+function buildDashboard(submissions) {
   const rows = submissions.map((s) => {
     const date = new Date(s.timestamp);
     const dateStr = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
     const timeStr = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
 
     const photosHtml = s.photoKeys.length
-      ? s.photoKeys.map((k) => `<a href="/api/photo?file=${encodeURIComponent(k)}" target="_blank" class="thumb-link">📷 Foto ${s.photoKeys.indexOf(k) + 1}</a>`).join(' ')
+      ? s.photoKeys.map((k) => `<a href="/api/foto-7kq4m9?file=${encodeURIComponent(k)}" target="_blank" class="thumb-link">Foto ${s.photoKeys.indexOf(k) + 1}</a>`).join(' ')
       : '<span class="no-photos">Geen foto’s</span>';
 
     return `<tr>
       <td class="date">${dateStr}<br><small>${timeStr}</small></td>
-      <td><strong>${esc(s.naam) || '—'}</strong><br><small>${esc(s.woonplaats) || ''}</small></td>
-      <td>${esc(s.telefoon) || '—'}<br><small>${esc(s.email) || ''}</small></td>
+      <td><strong>${esc(s.naam) || '-'}</strong><br><small>${esc(s.woonplaats) || ''}</small></td>
+      <td>${esc(s.telefoon) || '-'}<br><small>${esc(s.email) || ''}</small></td>
       <td>${esc(s.merk)} ${esc(s.modelnaam)}<br><small>${esc(s.kleur)} · ${esc(s.staat)}</small></td>
       <td class="acc">${esc(s.batterij)} / ${esc(s.lader)} / ${esc(s.doos)}</td>
       <td>${photosHtml}</td>
@@ -109,7 +97,7 @@ function buildDashboard(submissions, hasAdminKey, pathname) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Inzendingen</title>
+<title>Dashboard | Inzendingen</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f5f5f0; color: #1a1a1a; padding: 24px; }
@@ -140,7 +128,7 @@ function buildDashboard(submissions, hasAdminKey, pathname) {
 </style>
 </head>
 <body>
-<h1>📋 Inzendingen</h1>
+<h1>Inzendingen</h1>
 <p class="count">${submissions.length} inzendingen</p>
 
 <table>

@@ -1,4 +1,4 @@
-// Pages Function: GET /api/photo?file={path}
+// Pages Function: GET /api/foto-7kq4m9?file={path}
 // Proxy om foto's uit R2 naar de browser te serveren
 
 export async function onRequestGet({ request, env }) {
