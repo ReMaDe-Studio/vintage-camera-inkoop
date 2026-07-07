@@ -21,19 +21,19 @@ const wantedModels = [
 ];
 
 const factors = [
-  { t: 'Model', d: 'Populaire Y2K-modellen leveren meer op.' },
-  { t: 'Staat', d: 'Werkend en netjes is meer waard dan ongetest.' },
-  { t: 'Accessoires', d: 'Lader, batterij en doos verhogen de waarde.' },
-  { t: 'Kleur', d: 'Roze, wit, rood en opvallende kleuren zijn vaak populairder.' },
-  { t: 'Risico', d: 'Ongeteste of defecte camera’s krijgen een lagere bieding.' },
+  { t: 'Model', d: 'Populaire modellen leveren meestal meer op.' },
+  { t: 'Staat', d: 'Een werkende camera in nette staat is meer waard.' },
+  { t: 'Accessoires', d: 'Batterij, lader, doos of geheugenkaart kunnen helpen.' },
+  { t: 'Kleur', d: 'Zilver, roze en sommige opvallende kleuren zijn vaak populairder.' },
+  { t: 'Risico', d: 'Ongeteste of defecte camera’s zijn minder waard.' },
 ];
 
 const examples = [
   { title: 'Canon IXUS 70', meta: 'Werkend + batterij + lader', buy: 'vanaf €50', accent: false },
-  { title: 'Sony Cyber-shot DSC-T90 — roze', meta: 'Werkend + lader', buy: 'vanaf €60', accent: true },
-  { title: 'Casio Exilim — roze', meta: 'Werkend, zonder doos', buy: 'vanaf €35', accent: true },
-  { title: 'Nikon Coolpix — ongetest', meta: 'Zonder lader', buy: 'vanaf €10', accent: false },
-  { title: 'Defecte camera — lens error', meta: 'Lens error, kapot scherm of corrosie', buy: 'meestal niet interessant', accent: false, warn: true },
+  { title: 'Sony Cyber-shot DSC-T90, roze', meta: 'Werkend + lader', buy: 'vanaf €60', accent: true },
+  { title: 'Casio Exilim, roze', meta: 'Werkend, zonder doos', buy: 'vanaf €35', accent: true },
+  { title: 'Nikon Coolpix, ongetest', meta: 'Zonder lader', buy: 'vanaf €10', accent: false },
+  { title: 'Defecte camera, lens error', meta: 'Lens error, kapot scherm of corrosie', buy: 'meestal niet interessant', accent: false, warn: true },
 ];
 
 // Placeholder-fotostrip: vervang deze SVG-camera's door echte productfoto's
@@ -48,11 +48,11 @@ const stripCams = [
 const faqs = [
   {
     q: 'Betaal je de hoogste prijs?',
-    a: 'Nee, niet altijd. Wij geven een directe inkoopprijs. Die is lager dan de mogelijke doorverkoopwaarde, omdat wij het testen, schoonmaken, fotograferen en verkooprisico overnemen.',
+    a: 'Niet altijd. Als je zelf verkoopt, kun je soms meer krijgen. Bij ons kies je vooral voor snelheid en gemak.',
   },
   {
     q: 'Kan ik ook een kapotte camera aanbieden?',
-    a: 'Ja, maar defecte of ongeteste camera’s zijn vaak veel minder waard. Lens errors, kapotte schermen en batterijcorrosie maken een camera meestal niet interessant.',
+    a: 'Ja, maar defecte of ongeteste camera’s zijn vaak veel minder waard. Lens errors, kapotte schermen en batterijcorrosie maken een camera meestal lastig.',
   },
   {
     q: 'Welke camera’s zoeken jullie vooral?',
@@ -72,7 +72,7 @@ const faqs = [
       name="description"
       content="Verkoop je oude digitale compactcamera (Canon IXUS, Sony Cyber-shot, Fujifilm FinePix, Casio Exilim) snel en eerlijk. Gratis prijsindicatie, reactie binnen 24 uur."
     />
-    <title>Vintage Camera Inkoop — verkoop je oude digitale camera snel en eerlijk</title>
+    <title>Vintage Camera Inkoop | verkoop je oude digitale camera snel</title>
   </head>
   <body>
     <!-- ============ HEADER ============ -->
@@ -101,15 +101,15 @@ const faqs = [
         <div class="wrap hero-inner">
           <div class="hero-top">
             <div class="hero-copy">
-              <h1>Verkoop je oude digitale camera binnen&nbsp;1&nbsp;minuut</h1>
+              <h1>Verkoop je oude digitale camera snel</h1>
               <p class="lede">
-                Heb je nog een oude Canon IXUS, Sony Cyber-shot, Fujifilm FinePix of Casio
-                Exilim liggen? Vul in 1 minuut je model en de staat in en zie meteen een
-                realistische prijsindicatie.
+                Heb je nog een oude Canon, Sony, Fujifilm of Casio liggen? Vul merk, model
+                en staat in. Je krijgt direct een eerste prijsindicatie.
               </p>
               <div class="chips hero-chips">
-                <span class="chip">✓ Gratis prijsinschatting</span>
+                <span class="chip">✓ Gratis check</span>
                 <span class="chip">✓ Binnen 24 uur reactie</span>
+                <span class="chip">✓ Geen verplichting</span>
               </div>
             </div>
 
@@ -118,7 +118,7 @@ const faqs = [
               <div class="check-grid">
               <form id="cameraForm" class="card check-form" novalidate>
                   <!-- ---------- STAP 1 ---------- -->
-                  <div class="form-step">
+                  <div class="form-step" id="step1">
                     <p class="step-label"><b>Stap 1</b> · Model & staat <span class="step-time">± 1 minuut</span></p>
 
                     <div class="field-row">
@@ -164,15 +164,13 @@ const faqs = [
                         <div class="segmented sm" data-name="batterij">
                           <button type="button" data-val="ja">Ja</button>
                           <button type="button" data-val="nee">Nee</button>
-                          <button type="button" data-val="onbekend">?</button>
                         </div>
                       </fieldset>
                       <fieldset class="field">
                         <legend>Lader erbij?</legend>
-                        <div class="segmented sm" data-name="lader">
+                        <div class="segmented sm two" data-name="lader">
                           <button type="button" data-val="ja">Ja</button>
                           <button type="button" data-val="nee">Nee</button>
-                          <button type="button" data-val="onbekend">?</button>
                         </div>
                       </fieldset>
                       <fieldset class="field">
@@ -185,17 +183,18 @@ const faqs = [
                     </div>
 
                     <button type="button" id="toStep2" class="btn btn-primary full" hidden>
-                      Leuk bedrag? Verder met foto’s & contact ↓
+                      Tevreden met de schatting? Verder met foto’s
                     </button>
                   </div>
 
                   <!-- ---------- STAP 2 (verschijnt na de indicatie) ---------- -->
                   <div class="form-step step2" id="step2" hidden>
+                    <button type="button" id="backToStep1" class="step-back">← Terug naar stap 1</button>
                     <p class="step-label"><b>Stap 2</b> · Foto’s & contact</p>
 
                     <fieldset class="field">
                       <legend>Foto’s (3–6 stuks)</legend>
-                      <p class="hint">In elk geval de voor- en achterkant. Scherm, lens en het modelstickertje helpen ons snel een definitieve prijs te geven.</p>
+                      <p class="hint">Stuur vooral de voorkant, achterkant, lens en het modelstickertje mee. Dan kunnen we snel een definitieve prijs geven.</p>
                       <label class="dropzone" id="dropzone">
                         <input type="file" id="photoInput" accept="image/*" multiple />
                         <span class="dropzone-inner"><span class="plus">＋</span>Kies of sleep je foto’s</span>
@@ -231,25 +230,24 @@ const faqs = [
 
                   <a class="wa-escape" href={WHATSAPP} rel="noopener">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.3 0-.4.1-.5l.4-.5a1.7 1.7 0 0 0 .3-.4.5.5 0 0 0 0-.4c0-.1-.6-1.4-.8-1.9s-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.1 5 5 0 0 0 1 2.7 11.4 11.4 0 0 0 4.4 3.9 14.8 14.8 0 0 0 1.5.5 3.6 3.6 0 0 0 1.6.1 2.7 2.7 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3Z"/></svg>
-                    Liever appen? Stuur je foto’s direct via WhatsApp
+                    Liever appen? Stuur foto's via WhatsApp
                   </a>
                 </form>
 
 
               <!-- Live indicatie paneel -->
               <aside class="estimate card" id="estimatePanel" aria-live="polite">
-                  <span class="eyebrow">Directe inkoopindicatie</span>
+                  <span class="eyebrow">Eerste prijsindicatie</span>
                   <div id="estimateBody" class="estimate-body">
                     <p class="estimate-empty">
-                      Vul merk, model en de staat in — dan verschijnt hier meteen een grove
-                      inkoop-indicatie.
+                      Vul merk, model en staat in. Dan zie je meteen een eerste inschatting.
                     </p>
                   </div>
                   <button type="button" id="panelCta" class="btn btn-accent full" hidden>
-                    Rond je aanvraag af →
+                    Rond je aanvraag af
                   </button>
                   <p class="estimate-disclaimer">
-                    Dit is een grove schatting. De definitieve prijs bepalen we na onze check.
+                    Dit is een eerste schatting. Na de foto's geven we een definitieve prijs.
                   </p>
               </aside>
               </div>
@@ -263,50 +261,43 @@ const faqs = [
         <div class="wrap">
           <div class="section-head">
             <span class="eyebrow">Zo werkt het</span>
-            <h2>In drie simpele stappen</h2>
+            <h2>Snel geregeld</h2>
           </div>
           <ol class="steps">
             <li class="card step">
               <span class="step-num num-1">1</span>
               <h3>Check je camera</h3>
-              <p>Vul in 1 minuut het model en de staat in — je ziet meteen een indicatie.</p>
+              <p>Vul in wat je weet over je camera. Weet je het model niet precies? Geen probleem.</p>
             </li>
             <li class="card step">
               <span class="step-num num-2">2</span>
-              <h3>Stuur foto’s & gegevens</h3>
-              <p>Leuk bedrag? Stuur dan een paar foto’s en je contactgegevens mee.</p>
+              <h3>Stuur foto's</h3>
+              <p>Stuur een paar duidelijke foto's mee. Dan kunnen we beter kijken.</p>
             </li>
             <li class="card step">
               <span class="step-num num-3">3</span>
               <h3>Verkoop direct</h3>
-              <p>Akkoord? Dan spreken we ophalen, verzenden of afgeven af.</p>
+              <p>Akkoord met de prijs? Dan spreken we ophalen, verzenden of afgeven af.</p>
             </li>
           </ol>
         </div>
       </section>
 
 
-      <!-- ============ PRIJS UITLEG ============ -->
-      <section class="explainer reveal">
+      <!-- ============ WAT BEÏNVLOEDT DE PRIJS ============ -->
+      <section class="reveal">
         <div class="wrap">
-          <div class="explainer-card card">
-            <div>
-              <span class="eyebrow">Eerlijk over prijs</span>
-              <h2>Waarom onze inkoopprijs lager ligt dan zelf verkopen</h2>
-              <p>
-                Onze directe inkoopprijs ligt onder de mogelijke doorverkoopwaarde, omdat wij
-                rekening houden met testen, schoonmaken, risico, retourkans, ontbrekende
-                accessoires en verkoopkosten. Jij levert een stukje waarde in en krijgt er
-                gemak en zekerheid voor terug.
-              </p>
-            </div>
-            <ul class="takeover">
-              <li><b>Wij nemen over:</b></li>
-              <li>✓ Testen & schoonmaken</li>
-              <li>✓ Productfoto’s maken</li>
-              <li>✓ Advertentie, vragen & onderhandelen</li>
-              <li>✓ Verzend-, retour- en verkooprisico</li>
-            </ul>
+          <div class="section-head">
+            <span class="eyebrow">Prijs-factoren</span>
+            <h2>Wat bepaalt de prijs?</h2>
+          </div>
+          <div class="factor-grid">
+            {factors.map((f) => (
+              <div class="card factor">
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -354,20 +345,27 @@ const faqs = [
         </div>
       </section>
 
-      <!-- ============ WAT BEÏNVLOEDT DE PRIJS ============ -->
-      <section class="reveal">
+      <!-- ============ PRIJS UITLEG ============ -->
+      <section class="explainer reveal">
         <div class="wrap">
-          <div class="section-head">
-            <span class="eyebrow">Prijs-factoren</span>
-            <h2>Wat beïnvloedt de prijs?</h2>
-          </div>
-          <div class="factor-grid">
-            {factors.map((f) => (
-              <div class="card factor">
-                <h3>{f.t}</h3>
-                <p>{f.d}</p>
-              </div>
-            ))}
+          <div class="explainer-card card">
+            <div>
+              <span class="eyebrow">Eerlijk over prijs</span>
+              <h2>Waarom onze prijs lager is dan zelf verkopen</h2>
+              <p>
+                Als je zelf verkoopt, kun je soms meer krijgen. Daar staat wel werk tegenover:
+                testen, foto's maken, berichten beantwoorden, onderhandelen en soms retourgedoe.
+                Wij nemen dat werk van je over. Daarom ligt onze prijs lager. Jij weet snel waar
+                je aan toe bent.
+              </p>
+            </div>
+            <ul class="takeover">
+              <li><b>Wij regelen:</b></li>
+              <li>✓ Testen en schoonmaken</li>
+              <li>✓ Foto's maken</li>
+              <li>✓ Berichten en onderhandelen</li>
+              <li>✓ Verkoop en eventueel retourgedoe</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -378,9 +376,8 @@ const faqs = [
           <div class="warning card">
             <span class="warning-ico" aria-hidden="true">!</span>
             <p>
-              Niet elke oude camera is veel waard. Sommige modellen zijn populair, andere juist
-              lastig te verkopen. Daarom geven we liever een eerlijke, realistische prijs dan een
-              te hoge belofte.
+              Niet elke oude camera is veel waard. Sommige modellen zijn populair, andere bijna
+              niet. Daarom geven we liever een realistische prijs dan een mooi verhaal.
             </p>
           </div>
         </div>
@@ -391,8 +388,8 @@ const faqs = [
         <div class="wrap">
           <div class="section-head">
             <span class="eyebrow">Voorbeelden</span>
-            <h2>Voorbeelden van een schatting</h2>
-            <p>Indicaties bij een complete, werkende set. Jouw camera kan hoger of lager uitvallen.</p>
+            <h2>Voorbeelden van een prijs</h2>
+            <p>Dit zijn voorbeelden. Jouw camera kan hoger of lager uitvallen.</p>
           </div>
           <div class="example-grid">
             {examples.map((ex) => (
@@ -400,7 +397,7 @@ const faqs = [
                 <h3>{ex.title}</h3>
                 <p class="ex-meta">{ex.meta}</p>
                 <div class:list={['ex-buy', { 'ex-warn': ex.warn }]}>
-                  <span>Directe inkoopindicatie</span>
+                  <span>Eerste prijsindicatie</span>
                   <b>{ex.buy}</b>
                 </div>
               </div>
@@ -414,10 +411,10 @@ const faqs = [
         <div class="wrap">
           <div class="section-head">
             <span class="eyebrow">Waarom direct verkopen</span>
-            <h2>Gemak, zonder gedoe</h2>
+            <h2>Geen gedoe met zelf verkopen</h2>
             <p>
-              Je betaalt een klein stukje waarde in voor gemak: wij nemen het werk en het risico
-              over. Daarom ligt de directe inkoopprijs lager dan zelf verkopen.
+              Je kiest voor gemak. Geen advertenties, geen onderhandelingen en geen gedoe met
+              onbekende kopers.
             </p>
           </div>
           <div class="why-grid">
@@ -470,7 +467,7 @@ const faqs = [
 
     <!-- ============ MOBIELE STICKY PRIJSBALK ============ -->
     <div class="mobile-bar" id="mobileBar" hidden>
-      <span id="mobileBarText">Indicatie: <b>—</b></span>
+      <span id="mobileBarText">Indicatie: <b>...</b></span>
       <button type="button" class="btn btn-accent" id="mobileBarBtn">Bekijk</button>
     </div>
 
@@ -490,7 +487,7 @@ const faqs = [
         </nav>
       </div>
       <div class="wrap footer-legal">
-        <p>© 2026 Vintage Camera Inkoop · Placeholder — vul hier je bedrijfs- en privacygegevens in.</p>
+        <p>© 2026 Vintage Camera Inkoop · Placeholder, vul hier je bedrijfs- en privacygegevens in.</p>
       </div>
     </footer>
 
@@ -502,7 +499,9 @@ const faqs = [
       const body = document.getElementById('estimateBody');
       const panelCta = document.getElementById('panelCta');
       const toStep2 = document.getElementById('toStep2');
+      const step1 = document.getElementById('step1');
       const step2 = document.getElementById('step2');
+      const backToStep1 = document.getElementById('backToStep1');
       const mobileBar = document.getElementById('mobileBar');
       const mobileBarText = document.getElementById('mobileBarText');
       const mobileBarBtn = document.getElementById('mobileBarBtn');
@@ -608,12 +607,20 @@ const faqs = [
       });
 
       function revealStep2() {
+        step1.hidden = true;
         step2.hidden = false;
         toStep2.hidden = true;
-        step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('check').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      function showStep1() {
+        step2.hidden = true;
+        step1.hidden = false;
+        toStep2.hidden = false;
+        document.getElementById('check').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
       toStep2.addEventListener('click', revealStep2);
       panelCta.addEventListener('click', revealStep2);
+      backToStep1.addEventListener('click', showStep1);
       mobileBarBtn.addEventListener('click', () => {
         document.getElementById('estimatePanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
@@ -642,7 +649,7 @@ const faqs = [
           if (r.headline) html += `<p class="est-headline">${r.headline}</p>`;
           html += `<div class="est-price"><span class="est-from">vanaf</span><span>€${r.buyFrom}</span></div>`;
           if (r.reasons.length) {
-            html += '<ul class="est-reasons">' + r.reasons.map((x) => `<li>\${x}</li>`).join('') + '</ul>';
+            html += '<ul class="est-reasons">' + r.reasons.map((x) => `<li>${x}</li>`).join('') + '</ul>';
           }
           html += `<p class="est-note">${r.note}</p>`;
           mobileBarText.innerHTML = `Indicatie: <b>vanaf €${r.buyFrom}</b>`;
@@ -754,7 +761,9 @@ const faqs = [
       @media (min-width: 1280px) { .check-grid { grid-template-columns: minmax(0, 1.22fr) minmax(260px, 0.78fr); } }
       .check-form { display: grid; gap: 14px; padding: 14px 18px 18px; }
       .form-step { display: grid; gap: 14px; }
-      .form-step.step2 { border-top: 1.5px dashed var(--line); padding-top: 22px; }
+      .form-step.step2 { padding-top: 2px; }
+      .step-back { justify-self: start; background: none; border: none; padding: 0; margin: 0 0 2px; font-size: 0.85rem; font-weight: 600; color: var(--muted); cursor: pointer; font-family: var(--font-mono); }
+      .step-back:hover { color: var(--ink); }
       .step-label { margin: 0; font-size: 0.85rem; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: baseline; gap: 10px; }
       .step-label b { color: var(--accent-ink); }
       .step-time { font-size: 0.72rem; }
@@ -803,7 +812,7 @@ const faqs = [
       .wa-escape { display: inline-flex; align-items: center; gap: 8px; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #1d7c4d; text-decoration: none; padding: 12px; border: 1px solid #cde7d8; background: #f2faf5; border-radius: 999px; }
       .wa-escape:hover { border-color: #1d7c4d; }
 
-      /* :global() — deze elementen worden pas na page-load via innerHTML
+      /* :global(): deze elementen worden pas na page-load via innerHTML
          aangemaakt door het script en krijgen daardoor nooit Astro's
          data-astro-cid scope-attribuut; zonder :global() matchen de regels niets. */
       :global(.thanks) { text-align: center; padding: 20px 8px; }
