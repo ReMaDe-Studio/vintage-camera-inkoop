@@ -1,0 +1,982 @@
+---
+import '../styles/global.css';
+import { BRANDS, MODELS, COLORS } from '../data/models.js';
+
+// Vervang dit door je echte WhatsApp-nummer (landcode zonder +, bv. 31612345678).
+const WHATSAPP = 'https://wa.me/31600000000';
+
+const wantedModels = [
+  { merk: 'Canon', model: 'IXUS 70' },
+  { merk: 'Canon', model: 'IXUS 75' },
+  { merk: 'Canon', model: 'IXUS 80' },
+  { merk: 'Canon', model: 'IXUS 100' },
+  { merk: 'Sony', model: 'Cyber-shot DSC-T77' },
+  { merk: 'Sony', model: 'Cyber-shot DSC-T90' },
+  { merk: 'Sony', model: 'Cyber-shot DSC-T200' },
+  { merk: 'Fujifilm', model: 'FinePix Z10fd' },
+  { merk: 'Fujifilm', model: 'FinePix Z5fd' },
+  { merk: 'Casio', model: 'Exilim EX-Z serie' },
+  { merk: 'Olympus', model: 'mju Digital' },
+  { merk: 'Panasonic', model: 'Lumix FX serie' },
+];
+
+const factors = [
+  { t: 'Model', d: 'Populaire Y2K-modellen leveren meer op.' },
+  { t: 'Staat', d: 'Werkend en netjes is meer waard dan ongetest.' },
+  { t: 'Accessoires', d: 'Lader, batterij en doos verhogen de waarde.' },
+  { t: 'Kleur', d: 'Roze, wit, rood en opvallende kleuren zijn vaak populairder.' },
+  { t: 'Risico', d: 'Ongeteste of defecte camera’s krijgen een lagere bieding.' },
+];
+
+const examples = [
+  { title: 'Canon IXUS 70', meta: 'Werkend + batterij + lader', buy: 'vanaf €50', accent: false },
+  { title: 'Sony Cyber-shot DSC-T90 — roze', meta: 'Werkend + lader', buy: 'vanaf €60', accent: true },
+  { title: 'Casio Exilim — roze', meta: 'Werkend, zonder doos', buy: 'vanaf €35', accent: true },
+  { title: 'Nikon Coolpix — ongetest', meta: 'Zonder lader', buy: 'vanaf €10', accent: false },
+  { title: 'Defecte camera — lens error', meta: 'Lens error, kapot scherm of corrosie', buy: 'meestal niet interessant', accent: false, warn: true },
+];
+
+// Placeholder-fotostrip: vervang deze SVG-camera's door echte productfoto's
+// in public/images/ (bv. <img src="/images/ixus-70.jpg" alt="...">).
+const stripCams = [
+  { body: '#ffb8c2', ring: '#ff6bb5', caption: 'Cyber-shot T90 · roze' },
+  { body: '#00bfff', ring: '#1a1a1a', caption: 'Exilim EX-Z · blauw' },
+  { body: '#ffd900', ring: '#ff8052', caption: 'FinePix Z10fd · geel' },
+  { body: '#ff8052', ring: '#1a1a1a', caption: 'Canon IXUS · coral' },
+];
+
+const faqs = [
+  {
+    q: 'Betaal je de hoogste prijs?',
+    a: 'Nee, niet altijd. Wij geven een directe inkoopprijs. Die is lager dan de mogelijke doorverkoopwaarde, omdat wij het testen, schoonmaken, fotograferen en verkooprisico overnemen.',
+  },
+  {
+    q: 'Kan ik ook een kapotte camera aanbieden?',
+    a: 'Ja, maar defecte of ongeteste camera’s zijn vaak veel minder waard. Lens errors, kapotte schermen en batterijcorrosie maken een camera meestal niet interessant.',
+  },
+  {
+    q: 'Welke camera’s zoeken jullie vooral?',
+    a: 'Vooral Canon IXUS, Sony Cyber-shot, Fujifilm FinePix, Casio Exilim, Olympus mju Digital en Panasonic Lumix compactcamera’s.',
+  },
+  { q: 'Hoe snel krijg ik reactie?', a: 'Meestal binnen 24 uur.' },
+  { q: 'Kan ik mijn camera opsturen?', a: 'Ja, opsturen of lokaal afspreken is mogelijk.' },
+];
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Verkoop je oude digitale compactcamera (Canon IXUS, Sony Cyber-shot, Fujifilm FinePix, Casio Exilim) snel en eerlijk. Gratis prijsindicatie, reactie binnen 24 uur."
+    />
+    <title>Vintage Camera Inkoop — verkoop je oude digitale camera snel en eerlijk</title>
+  </head>
+  <body>
+    <!-- ============ HEADER ============ -->
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a href="#top" class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2.5" y="6.5" width="19" height="13" rx="3" />
+              <circle cx="12" cy="13" r="3.4" />
+              <path d="M8 6.5 9.2 4.5h5.6L16 6.5" />
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong>Vintage Camera Inkoop</strong>
+            <em>Verkoop je oude digitale camera snel en eerlijk.</em>
+          </span>
+        </a>
+        <a href="#check" class="btn btn-primary header-cta">Check mijn camera</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ============ HERO ============ -->
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">
+              <span aria-hidden="true">◍</span> Digitale compactcamera’s · 2000–2012
+            </span>
+            <h1>Verkoop je oude digitale camera binnen&nbsp;1&nbsp;minuut</h1>
+            <p class="lede">
+              Heb je nog een oude Canon IXUS, Sony Cyber-shot, Fujifilm FinePix of Casio
+              Exilim liggen? Vul in 1 minuut je model en de staat in en zie meteen een
+              realistische prijsindicatie.
+            </p>
+            <div class="hero-actions">
+              <a href="#check" class="btn btn-primary btn-lg">Check mijn camera</a>
+              <a href="#modellen" class="btn btn-ghost btn-lg">Welke camera’s zoeken jullie?</a>
+            </div>
+            <div class="chips hero-chips">
+              <span class="chip">✓ Gratis prijsinschatting</span>
+              <span class="chip">✓ Binnen 24 uur reactie</span>
+            </div>
+            <p class="hero-honest">
+              We geven een <strong>eerlijke directe inkoopprijs</strong>. Die ligt lager dan
+              wat je zelf met verkopen kunt vangen, omdat wij het testen, schoonmaken,
+              fotograferen en het verkooprisico overnemen. Jij bent er in één keer vanaf.
+            </p>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <div class="polaroid">
+              <div class="polaroid-photo">
+                <svg viewBox="0 0 200 150" width="100%" role="img">
+                  <rect width="200" height="150" rx="8" fill="#f0efe9" />
+                  <rect x="34" y="40" width="132" height="78" rx="8" fill="#1a1a1a" />
+                  <circle cx="100" cy="79" r="26" fill="#2b2b2b" stroke="#555" stroke-width="3" />
+                  <circle cx="100" cy="79" r="15" fill="#0d0d0d" stroke="#00bfff" stroke-width="2" />
+                  <circle cx="93" cy="72" r="4" fill="#666" />
+                  <rect x="44" y="30" width="26" height="8" rx="3" fill="#333" />
+                  <circle cx="150" cy="34" r="4" fill="#ff6bb5" />
+                </svg>
+              </div>
+              <p class="polaroid-caption">jouw camera → snel weg ✦</p>
+            </div>
+            <span class="sticker sticker-1">◍ Y2K</span>
+            <span class="sticker sticker-2">100% eerlijk</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOE HET WERKT ============ -->
+      <section class="reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Zo werkt het</span>
+            <h2>In drie simpele stappen</h2>
+          </div>
+          <ol class="steps">
+            <li class="card step">
+              <span class="step-num num-1">1</span>
+              <h3>Check je camera</h3>
+              <p>Vul in 1 minuut het model en de staat in — je ziet meteen een indicatie.</p>
+            </li>
+            <li class="card step">
+              <span class="step-num num-2">2</span>
+              <h3>Stuur foto’s & gegevens</h3>
+              <p>Leuk bedrag? Stuur dan een paar foto’s en je contactgegevens mee.</p>
+            </li>
+            <li class="card step">
+              <span class="step-num num-3">3</span>
+              <h3>Verkoop direct</h3>
+              <p>Akkoord? Dan spreken we ophalen, verzenden of afgeven af.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============ PERSOONLIJKE INTRO ============ -->
+      <!-- Vervang de placeholder-tekst en avatar door je eigen naam en foto. -->
+      <section class="reveal">
+        <div class="wrap">
+          <div class="card intro-card">
+            <span class="intro-avatar" aria-hidden="true">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="8.5" r="4" />
+                <path d="M4.5 20c1.2-3.6 4.1-5.5 7.5-5.5S18.3 16.4 19.5 20" />
+              </svg>
+            </span>
+            <div>
+              <h2>Hoi, ik ben [jouw naam] 👋</h2>
+              <p>
+                Ik verzamel en herverkoop Y2K-compactcamera’s. Geen bedrijf met een callcenter —
+                gewoon iemand die deze camera’s een tweede leven geeft. Je krijgt persoonlijk
+                antwoord, meestal dezelfde dag nog.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CAMERA CHECK: STAP 1 + INDICATIE, DAARNA STAP 2 ============ -->
+      <section id="check" class="check reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Camera check</span>
+            <h2>Wat is jouw camera waard?</h2>
+            <p>
+              Stap 1 duurt een minuutje en toont meteen een indicatie. Foto’s en gegevens
+              stuur je pas daarna — alleen als het bedrag je aanstaat.
+            </p>
+          </div>
+
+          <div class="check-grid">
+            <form id="cameraForm" class="card check-form" novalidate>
+              <!-- ---------- STAP 1 ---------- -->
+              <div class="form-step">
+                <p class="step-label"><b>Stap 1</b> · Model & staat <span class="step-time">± 1 minuut</span></p>
+
+                <div class="field-row">
+                  <label class="field">
+                    <span>Merk</span>
+                    <select name="merk">
+                      <option value="" disabled selected>Kies een merk…</option>
+                      {BRANDS.map((b) => <option value={b}>{b}</option>)}
+                    </select>
+                    <input type="text" id="merkOverig" placeholder="Welk merk?" autocomplete="off" hidden />
+                  </label>
+                  <label class="field">
+                    <span>Modelnaam</span>
+                    <input type="text" name="modelnaam" list="modelList" placeholder="bv. IXUS 70" autocomplete="off" />
+                    <datalist id="modelList">
+                      {MODELS.map((m) => <option value={m.model} />)}
+                    </datalist>
+                  </label>
+                </div>
+
+                <label class="field">
+                  <span>Kleur</span>
+                  <select name="kleur">
+                    <option value="" disabled selected>Kies een kleur…</option>
+                    {COLORS.map((c) => <option value={c}>{c}</option>)}
+                  </select>
+                  <input type="text" id="kleurOverig" placeholder="Welke kleur?" autocomplete="off" hidden />
+                </label>
+
+                <fieldset class="field">
+                  <legend>Wat is de staat?</legend>
+                  <div class="segmented wrap-seg" data-name="staat">
+                    <button type="button" data-val="netjes">Werkend, zeer netjes</button>
+                    <button type="button" data-val="gebruikt">Werkend, gebruikssporen</button>
+                    <button type="button" data-val="ongetest">Ongetest / weet ik niet</button>
+                    <button type="button" data-val="defect">Defect of schade</button>
+                  </div>
+                </fieldset>
+
+                <div class="field-row three">
+                  <fieldset class="field">
+                    <legend>Batterij erbij?</legend>
+                    <div class="segmented sm" data-name="batterij">
+                      <button type="button" data-val="ja">Ja</button>
+                      <button type="button" data-val="nee">Nee</button>
+                      <button type="button" data-val="onbekend">?</button>
+                    </div>
+                  </fieldset>
+                  <fieldset class="field">
+                    <legend>Lader erbij?</legend>
+                    <div class="segmented sm" data-name="lader">
+                      <button type="button" data-val="ja">Ja</button>
+                      <button type="button" data-val="nee">Nee</button>
+                      <button type="button" data-val="onbekend">?</button>
+                    </div>
+                  </fieldset>
+                  <fieldset class="field">
+                    <legend>Originele doos?</legend>
+                    <div class="segmented sm two" data-name="doos">
+                      <button type="button" data-val="ja">Ja</button>
+                      <button type="button" data-val="nee">Nee</button>
+                    </div>
+                  </fieldset>
+                </div>
+
+                <button type="button" id="toStep2" class="btn btn-primary full" hidden>
+                  Leuk bedrag? Verder met foto’s & contact ↓
+                </button>
+              </div>
+
+              <!-- ---------- STAP 2 (verschijnt na de indicatie) ---------- -->
+              <div class="form-step step2" id="step2" hidden>
+                <p class="step-label"><b>Stap 2</b> · Foto’s & contact</p>
+
+                <fieldset class="field">
+                  <legend>Foto’s (3–6 stuks)</legend>
+                  <p class="hint">In elk geval de voor- en achterkant. Scherm, lens en het modelstickertje helpen ons snel een definitieve prijs te geven.</p>
+                  <label class="dropzone" id="dropzone">
+                    <input type="file" id="photoInput" accept="image/*" multiple />
+                    <span class="dropzone-inner"><span class="plus">＋</span>Kies of sleep je foto’s</span>
+                  </label>
+                  <div class="photo-previews" id="photoPreviews"></div>
+                </fieldset>
+
+                <fieldset class="field">
+                  <legend>Accessoires (meerdere mogelijk)</legend>
+                  <div class="checks">
+                    {['Geheugenkaart', 'Kabels', 'Tasje', 'Extra batterij', 'Handleiding'].map((a) => (
+                      <label class="check"><input type="checkbox" name="accessoires" value={a} />{a}</label>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <div class="field-row">
+                  <label class="field"><span>Naam</span><input type="text" name="naam" autocomplete="name" /></label>
+                  <label class="field"><span>Telefoon of WhatsApp</span><input type="tel" name="telefoon" autocomplete="tel" /></label>
+                </div>
+                <div class="field-row">
+                  <label class="field"><span>E-mail</span><input type="email" name="email" autocomplete="email" /></label>
+                  <label class="field"><span>Woonplaats</span><input type="text" name="woonplaats" autocomplete="address-level2" /></label>
+                </div>
+
+                <p class="privacy-note">
+                  We gebruiken je gegevens alleen om op je aanvraag te reageren. Zie ons
+                  <a href="#privacy">privacybeleid</a>.
+                </p>
+
+                <button type="submit" class="btn btn-accent btn-lg full">Verstuur mijn camera</button>
+              </div>
+
+              <a class="wa-escape" href={WHATSAPP} rel="noopener">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.3 0-.4.1-.5l.4-.5a1.7 1.7 0 0 0 .3-.4.5.5 0 0 0 0-.4c0-.1-.6-1.4-.8-1.9s-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.1 5 5 0 0 0 1 2.7 11.4 11.4 0 0 0 4.4 3.9 14.8 14.8 0 0 0 1.5.5 3.6 3.6 0 0 0 1.6.1 2.7 2.7 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3Z"/></svg>
+                Liever appen? Stuur je foto’s direct via WhatsApp
+              </a>
+            </form>
+
+            <!-- Live indicatie paneel -->
+            <aside class="estimate card" id="estimatePanel" aria-live="polite">
+              <span class="eyebrow">Directe inkoopindicatie</span>
+              <div id="estimateBody" class="estimate-body">
+                <p class="estimate-empty">
+                  Vul merk, model en de staat in — dan verschijnt hier meteen een grove
+                  inkoop-indicatie.
+                </p>
+              </div>
+              <button type="button" id="panelCta" class="btn btn-accent full" hidden>
+                Rond je aanvraag af →
+              </button>
+              <p class="estimate-disclaimer">
+                Dit is een grove schatting. De definitieve prijs bepalen we na onze check.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PRIJS UITLEG ============ -->
+      <section class="explainer reveal">
+        <div class="wrap">
+          <div class="explainer-card card">
+            <div>
+              <span class="eyebrow">Eerlijk over prijs</span>
+              <h2>Waarom onze inkoopprijs lager ligt dan zelf verkopen</h2>
+              <p>
+                Onze directe inkoopprijs ligt onder de mogelijke doorverkoopwaarde, omdat wij
+                rekening houden met testen, schoonmaken, risico, retourkans, ontbrekende
+                accessoires en verkoopkosten. Jij levert een stukje waarde in en krijgt er
+                gemak en zekerheid voor terug.
+              </p>
+            </div>
+            <ul class="takeover">
+              <li><b>Wij nemen over:</b></li>
+              <li>✓ Testen & schoonmaken</li>
+              <li>✓ Productfoto’s maken</li>
+              <li>✓ Advertentie, vragen & onderhandelen</li>
+              <li>✓ Verzend-, retour- en verkooprisico</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FOTOSTRIP (vervang door echte productfoto's) ============ -->
+      <section class="strip-section reveal" aria-label="Voorbeelden van camera’s">
+        <div class="wrap">
+          <div class="photo-strip">
+            {stripCams.map((c, i) => (
+              <figure class={`strip-card tilt-${i % 4}`}>
+                <svg viewBox="0 0 160 110" width="100%" role="img" aria-label={c.caption}>
+                  <rect width="160" height="110" rx="6" fill="#f5f4ef" />
+                  <rect x="22" y="26" width="116" height="62" rx="10" fill={c.body} stroke="#1a1a1a" stroke-width="2" />
+                  <circle cx="80" cy="57" r="20" fill="#1a1a1a" />
+                  <circle cx="80" cy="57" r="11" fill="#0d0d0d" stroke={c.ring} stroke-width="2.5" />
+                  <circle cx="74" cy="51" r="3" fill="#777" />
+                  <rect x="30" y="18" width="22" height="7" rx="3" fill="#1a1a1a" />
+                  <circle cx="126" cy="22" r="3" fill={c.ring} />
+                </svg>
+                <figcaption>{c.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p class="strip-note">✦ binnenkort: foto’s van echte ingekochte camera’s ✦</p>
+        </div>
+      </section>
+
+      <!-- ============ GEZOCHTE MODELLEN ============ -->
+      <section id="modellen" class="reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Top gezocht</span>
+            <h2>Deze modellen zoeken we graag</h2>
+            <p>Tik op een model om de check alvast in te vullen.</p>
+          </div>
+          <div class="model-grid">
+            {wantedModels.map((m) => (
+              <button type="button" class="model-card" data-merk={m.merk} data-model={m.model}>
+                <span class="model-ico" aria-hidden="true">▣</span>
+                <span>{m.merk} {m.model}</span>
+              </button>
+            ))}
+          </div>
+          <p class="also">Ook andere oude digitale compactcamera’s zijn welkom.</p>
+        </div>
+      </section>
+
+      <!-- ============ WAT BEÏNVLOEDT DE PRIJS ============ -->
+      <section class="reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Prijs-factoren</span>
+            <h2>Wat beïnvloedt de prijs?</h2>
+          </div>
+          <div class="factor-grid">
+            {factors.map((f) => (
+              <div class="card factor">
+                <h3>{f.t}</h3>
+                <p>{f.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ KRITISCHE WAARSCHUWING (amber, niet merk-koraal) ============ -->
+      <section class="reveal">
+        <div class="wrap">
+          <div class="warning card">
+            <span class="warning-ico" aria-hidden="true">!</span>
+            <p>
+              Niet elke oude camera is veel waard. Sommige modellen zijn populair, andere juist
+              lastig te verkopen. Daarom geven we liever een eerlijke, realistische prijs dan een
+              te hoge belofte.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VOORBEELDEN ============ -->
+      <section class="reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Voorbeelden</span>
+            <h2>Voorbeelden van een schatting</h2>
+            <p>Indicaties bij een complete, werkende set. Jouw camera kan hoger of lager uitvallen.</p>
+          </div>
+          <div class="example-grid">
+            {examples.map((ex) => (
+              <div class:list={['card', 'example', { accent: ex.accent, warn: ex.warn }]}>
+                <h3>{ex.title}</h3>
+                <p class="ex-meta">{ex.meta}</p>
+                <div class:list={['ex-buy', { 'ex-warn': ex.warn }]}>
+                  <span>Directe inkoopindicatie</span>
+                  <b>{ex.buy}</b>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WAAROM AAN ONS VERKOPEN ============ -->
+      <section class="why reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Waarom direct verkopen</span>
+            <h2>Gemak, zonder gedoe</h2>
+            <p>
+              Je betaalt een klein stukje waarde in voor gemak: wij nemen het werk en het risico
+              over. Daarom ligt de directe inkoopprijs lager dan zelf verkopen.
+            </p>
+          </div>
+          <div class="why-grid">
+            {[
+              'Geen gedoe met advertenties maken',
+              'Geen onderhandelingen met kopers',
+              'Geen retourrisico',
+              'Geen tijd kwijt aan testen/fotograferen',
+              'Snel duidelijkheid',
+              'Direct contact via WhatsApp',
+            ].map((b) => (
+              <div class="why-item"><span aria-hidden="true">✓</span>{b}</div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINAL CTA ============ -->
+      <section class="final-cta">
+        <div class="wrap">
+          <div class="final-inner">
+            <h2>Benieuwd wat jouw camera waard is?</h2>
+            <p>
+              Doe de check en zie meteen een eerlijke indicatie. We zijn vooral op zoek naar
+              compacte digitale camera’s uit ongeveer 2000–2012.
+            </p>
+            <a href="#check" class="btn btn-accent btn-lg">Start camera check</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FAQ ============ -->
+      <section id="faq" class="reveal">
+        <div class="wrap narrow">
+          <div class="section-head">
+            <span class="eyebrow">FAQ</span>
+            <h2>Veelgestelde vragen</h2>
+          </div>
+          <div class="faq-list">
+            {faqs.map((f) => (
+              <details class="faq-item">
+                <summary>{f.q}<span class="faq-plus" aria-hidden="true">＋</span></summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ MOBIELE STICKY PRIJSBALK ============ -->
+    <div class="mobile-bar" id="mobileBar" hidden>
+      <span id="mobileBarText">Indicatie: <b>—</b></span>
+      <button type="button" class="btn btn-accent" id="mobileBarBtn">Bekijk</button>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer" id="privacy">
+      <div class="wrap footer-inner">
+        <div class="footer-brand">
+          <strong>Vintage Camera Inkoop</strong>
+          <p>Verkoop je oude digitale camera snel en eerlijk.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#check">Camera aanmelden</a>
+          <a href={WHATSAPP} rel="noopener">WhatsApp</a>
+          <a href="https://instagram.com" rel="noopener">Instagram</a>
+          <a href="#faq">Veelgestelde vragen</a>
+          <a href="#privacy">Privacy</a>
+        </nav>
+      </div>
+      <div class="wrap footer-legal">
+        <p>© 2026 Vintage Camera Inkoop · Placeholder — vul hier je bedrijfs- en privacygegevens in.</p>
+      </div>
+    </footer>
+
+    <script>
+      import { estimate } from '../scripts/estimator.js';
+      import { MODELS as MODEL_DATA } from '../data/models.js';
+
+      const form = document.getElementById('cameraForm');
+      const body = document.getElementById('estimateBody');
+      const panelCta = document.getElementById('panelCta');
+      const toStep2 = document.getElementById('toStep2');
+      const step2 = document.getElementById('step2');
+      const mobileBar = document.getElementById('mobileBar');
+      const mobileBarText = document.getElementById('mobileBarText');
+      const mobileBarBtn = document.getElementById('mobileBarBtn');
+
+      const state = {
+        merk: '', modelnaam: '', kleur: '',
+        staat: '', batterij: '', lader: '', doos: '',
+      };
+
+      // Segmented (single-choice) knoppen
+      document.querySelectorAll('.segmented').forEach((seg) => {
+        const name = seg.getAttribute('data-name');
+        seg.querySelectorAll('button').forEach((b) => {
+          b.addEventListener('click', () => {
+            seg.querySelectorAll('button').forEach((x) => x.classList.remove('on'));
+            b.classList.add('on');
+            state[name] = b.getAttribute('data-val');
+            render();
+          });
+        });
+      });
+
+      // Tekstvelden
+      ['modelnaam'].forEach((n) => {
+        const el = form.querySelector(`[name="${n}"]`);
+        el.addEventListener('input', () => { state[n] = el.value; render(); });
+      });
+
+      // Generieke koppeling voor een <select> met een "Overig"-optie: bij
+      // "Overig" verschijnt een vrij tekstveld, anders volgt de state de select.
+      function wireSelectWithOverig(select, overigInput, stateKey, onChange) {
+        select.addEventListener('change', () => {
+          const isOther = select.value === 'Overig';
+          overigInput.hidden = !isOther;
+          state[stateKey] = isOther ? overigInput.value : select.value;
+          if (onChange) onChange(state[stateKey]);
+          render();
+          if (isOther) overigInput.focus();
+        });
+        overigInput.addEventListener('input', () => { state[stateKey] = overigInput.value; render(); });
+      }
+
+      // Merk: dropdown + filtert de model-autofill.
+      const merkSelect = form.querySelector('select[name="merk"]');
+      const merkOverig = document.getElementById('merkOverig');
+      const modelList = document.getElementById('modelList');
+      const modelInput = form.querySelector('[name="modelnaam"]');
+      const allModelOptions = [...modelList.querySelectorAll('option')].map((o) => o.value);
+
+      function filterModelList(merk) {
+        const opts = MODEL_DATA.filter((m) => m.merk.toLowerCase() === (merk || '').toLowerCase()).map((m) => m.model);
+        const list = opts.length ? opts : allModelOptions;
+        modelList.innerHTML = list.map((v) => `<option value="${v}"></option>`).join('');
+      }
+
+      wireSelectWithOverig(merkSelect, merkOverig, 'merk', (merk) => {
+        // Model leegmaken bij merkwissel: anders matcht de oude tekst geen
+        // enkele optie in de nieuwe (gefilterde) datalist en lijkt de
+        // suggestie-dropdown alsof hij niks meer laat zien.
+        modelInput.value = '';
+        state.modelnaam = '';
+        filterModelList(merk);
+      });
+
+      // Kleur: dropdown met dezelfde "Overig" vrije-tekst-fallback.
+      const kleurSelect = form.querySelector('select[name="kleur"]');
+      const kleurOverig = document.getElementById('kleurOverig');
+      wireSelectWithOverig(kleurSelect, kleurOverig, 'kleur');
+
+      // Model-grid: klik vult de check alvast in
+      document.querySelectorAll('.model-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          const merk = card.getAttribute('data-merk');
+          const model = card.getAttribute('data-model');
+          if ([...merkSelect.options].some((o) => o.value === merk)) {
+            merkSelect.value = merk;
+            merkOverig.hidden = true;
+          } else {
+            merkSelect.value = 'Overig';
+            merkOverig.hidden = false;
+            merkOverig.value = merk;
+          }
+          modelInput.value = model;
+          state.merk = merk;
+          state.modelnaam = model;
+          filterModelList(merk);
+          render();
+          document.getElementById('check').scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Foto-upload: één multi-upload veld met previews
+      const photoInput = document.getElementById('photoInput');
+      const previews = document.getElementById('photoPreviews');
+      photoInput.addEventListener('change', () => {
+        previews.innerHTML = '';
+        [...(photoInput.files || [])].slice(0, 8).forEach((file) => {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          img.alt = '';
+          previews.appendChild(img);
+        });
+      });
+
+      function revealStep2() {
+        step2.hidden = false;
+        toStep2.hidden = true;
+        step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      toStep2.addEventListener('click', revealStep2);
+      panelCta.addEventListener('click', revealStep2);
+      mobileBarBtn.addEventListener('click', () => {
+        document.getElementById('estimatePanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      function render() {
+        // pas genoeg ingevuld?
+        if (!state.merk && !state.modelnaam) return;
+        if (!state.staat) return;
+
+        const r = estimate({
+          merk: state.merk,
+          modelnaam: state.modelnaam,
+          kleur: state.kleur,
+          staat: state.staat,
+          batterij: state.batterij || 'onbekend',
+          lader: state.lader || 'onbekend',
+          doos: state.doos || 'nee',
+        });
+
+        let html = '';
+        if (r.status === 'defect') {
+          html += `<p class="est-headline warn">${r.headline}</p>`;
+          html += `<p class="est-note">${r.note}</p>`;
+          mobileBarText.innerHTML = 'Defect: <b>meestal niet interessant</b>';
+        } else {
+          if (r.headline) html += `<p class="est-headline">${r.headline}</p>`;
+          html += `<div class="est-price"><span class="est-from">vanaf</span><span>€${r.buyFrom}</span></div>`;
+          if (r.reasons.length) {
+            html += '<ul class="est-reasons">' + r.reasons.map((x) => `<li>${x}</li>`).join('') + '</ul>';
+          }
+          html += `<p class="est-note">${r.note}</p>`;
+          mobileBarText.innerHTML = `Indicatie: <b>vanaf €${r.buyFrom}</b>`;
+        }
+        body.innerHTML = html;
+
+        // vervolg-acties tonen (ook bij defect: foto's kunnen alsnog)
+        panelCta.hidden = false;
+        if (step2.hidden) toStep2.hidden = false;
+        mobileBar.hidden = false;
+      }
+
+      // Nep-submit (frontend-only)
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const payload = Object.fromEntries(data.entries());
+        payload.accessoires = data.getAll('accessoires');
+        payload.fotos = [...(photoInput.files || [])].map((f) => f.name);
+        Object.assign(payload, state);
+        console.log('[Vintage Camera Inkoop] aanvraag (nog niet verzonden):', payload);
+        form.innerHTML =
+          '<div class="thanks"><span class="thanks-ico">✓</span><h3>Bedankt! We hebben je aanvraag ontvangen.</h3><p>We reageren meestal binnen 24 uur met een eerlijke prijs. Let op je mail of WhatsApp.</p></div>';
+        mobileBar.hidden = true;
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      // Reveal-on-scroll
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+
+    <style>
+      /* ---------- header ---------- */
+      .site-header {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(250, 249, 245, 0.85);
+        backdrop-filter: saturate(1.1) blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+      .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; min-width: 0; }
+      .brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: #fff; flex: none; }
+      .brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+      .brand-text strong { font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .brand-text em { font-style: normal; font-size: 0.78rem; color: var(--muted); }
+      .header-cta { padding: 10px 18px; flex: none; }
+      @media (max-width: 620px) {
+        .brand-text em { display: none; }
+        .brand-text strong { font-size: 0.9rem; }
+        .brand-mark { width: 34px; height: 34px; }
+        .header-cta { padding: 9px 14px; font-size: 0.85rem; }
+      }
+
+      /* ---------- hero ---------- */
+      .hero { padding-top: 40px; }
+      .hero-grid { display: grid; gap: 40px; align-items: center; }
+      @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.15fr 0.85fr; gap: 56px; } .hero { padding-top: 64px; } }
+      .hero h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); margin: 4px 0 0; }
+      .lede { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--ink-soft); max-width: 40ch; margin: 18px 0 26px; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+      .hero-chips { gap: 8px; }
+      .hero-chips .chip { font-size: 0.82rem; padding: 7px 12px; }
+      .hero-honest { margin-top: 22px; padding: 16px 18px; background: #fff; border: 1px dashed var(--line); border-radius: var(--radius); font-size: 0.92rem; color: var(--ink-soft); max-width: 46ch; }
+
+      .hero-visual { position: relative; display: grid; place-items: center; min-height: 260px; }
+      .polaroid { background: #fff; padding: 14px 14px 8px; border-radius: 12px; box-shadow: var(--shadow); transform: rotate(-3deg); width: min(320px, 80%); border: 1px solid var(--line); }
+      .polaroid-photo { border-radius: 8px; overflow: hidden; }
+      .polaroid-caption { font-family: var(--font-mono); font-size: 0.8rem; text-align: center; color: var(--ink-soft); margin: 10px 0 4px; }
+      .sticker { position: absolute; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 6px 10px; border-radius: 999px; box-shadow: var(--shadow-soft); }
+      .sticker-1 { top: 8px; right: 6%; background: var(--pop-yellow); color: var(--ink); transform: rotate(6deg); }
+      .sticker-2 { bottom: 10px; left: 4%; background: var(--pop-cerulean); color: #fff; transform: rotate(-5deg); }
+
+      /* ---------- steps ---------- */
+      .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+      @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+      .step { position: relative; }
+      .step-num { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-ink); font-family: var(--font-mono); font-weight: 700; margin-bottom: 14px; }
+      .step-num.num-2 { background: var(--pop-coral-soft); color: var(--pop-coral-ink); }
+      .step-num.num-3 { background: var(--pop-cerulean-soft); color: var(--pop-cerulean-ink); }
+      .step h3 { font-size: 1.15rem; }
+      .step p { color: var(--ink-soft); margin: 8px 0 0; }
+
+      /* ---------- intro ---------- */
+      .intro-card { display: flex; gap: 18px; align-items: flex-start; max-width: 720px; }
+      .intro-avatar { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); border: 1.5px dashed var(--accent-ink); }
+      .intro-card h2 { font-size: 1.25rem; margin-bottom: 8px; }
+      .intro-card p { color: var(--ink-soft); margin: 0; }
+
+      /* ---------- check form ---------- */
+      .check-grid { display: grid; gap: 24px; align-items: start; }
+      @media (min-width: 960px) { .check-grid { grid-template-columns: 1.4fr 0.9fr; } }
+      .check-form { display: grid; gap: 20px; }
+      .form-step { display: grid; gap: 20px; }
+      .form-step.step2 { border-top: 1.5px dashed var(--line); padding-top: 22px; }
+      .step-label { margin: 0; font-size: 0.85rem; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: baseline; gap: 10px; }
+      .step-label b { color: var(--accent-ink); }
+      .step-time { font-size: 0.72rem; }
+      .field { display: grid; gap: 7px; border: 0; padding: 0; margin: 0; min-width: 0; }
+      .field > span, .field legend { font-size: 0.85rem; font-weight: 600; color: var(--ink); padding: 0; }
+      .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field select {
+        font: inherit; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; width: 100%;
+      }
+      .field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 15px) center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+      .field select:invalid { color: var(--muted); }
+      .field #merkOverig { margin-top: 8px; }
+      .field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+      .field-row { display: grid; gap: 16px; }
+      @media (min-width: 560px) { .field-row { grid-template-columns: 1fr 1fr; } .field-row.three { grid-template-columns: 1fr 1fr 1fr; } }
+      .hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
+
+      .segmented { display: flex; flex-wrap: wrap; gap: 8px; }
+      .segmented.wrap-seg button { flex: 1 1 auto; }
+      .segmented button {
+        font: inherit; cursor: pointer; padding: 10px 14px; border-radius: 999px;
+        border: 1px solid var(--line); background: #fff; color: var(--ink-soft); transition: all .12s ease;
+      }
+      .segmented.sm { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+      .segmented.sm.two { grid-template-columns: 1fr 1fr; }
+      .segmented.sm button { padding: 10px 6px; text-align: center; }
+      .segmented button:hover { border-color: var(--ink); }
+      .segmented button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+      .checks { display: flex; flex-wrap: wrap; gap: 10px; }
+      .checks .check { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; }
+      .checks .check input { accent-color: var(--accent); }
+
+      .dropzone { position: relative; display: block; border: 1.5px dashed var(--line); border-radius: 14px; padding: 26px 16px; text-align: center; cursor: pointer; transition: border-color .12s ease; }
+      .dropzone:hover { border-color: var(--accent); }
+      .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+      .dropzone-inner { display: grid; gap: 4px; justify-items: center; font-size: 0.88rem; color: var(--muted); }
+      .dropzone .plus { font-size: 1.5rem; color: var(--ink-soft); }
+      .photo-previews { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+      .photo-previews:empty { display: none; }
+      .photo-previews img { aspect-ratio: 1; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+
+      .privacy-note { font-size: 0.82rem; color: var(--muted); margin: 0; }
+      .privacy-note a { color: var(--accent-ink); }
+      .full { width: 100%; }
+
+      .wa-escape { display: inline-flex; align-items: center; gap: 8px; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #1d7c4d; text-decoration: none; padding: 12px; border: 1px solid #cde7d8; background: #f2faf5; border-radius: 999px; }
+      .wa-escape:hover { border-color: #1d7c4d; }
+
+      /* :global() — deze elementen worden pas na page-load via innerHTML
+         aangemaakt door het script en krijgen daardoor nooit Astro's
+         data-astro-cid scope-attribuut; zonder :global() matchen de regels niets. */
+      :global(.thanks) { text-align: center; padding: 20px 8px; }
+      :global(.thanks-ico) { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); font-size: 1.5rem; margin-bottom: 12px; }
+
+      /* ---------- estimate panel ---------- */
+      .estimate { position: sticky; top: 84px; background: var(--ink); color: #fff; border-color: var(--ink); }
+      .estimate .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
+      .estimate-empty { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+      :global(.est-headline) { font-weight: 700; margin: 4px 0 0; }
+      :global(.est-headline.warn) { color: #f5c97b; }
+      :global(.est-price) { font-size: clamp(3rem, 10vw, 4.4rem); font-weight: 800; letter-spacing: -0.03em; margin: 8px 0 14px; display: flex; align-items: baseline; gap: 12px; }
+      :global(.est-from) { font-size: 1.2rem; font-weight: 500; color: rgba(255,255,255,0.65); }
+      :global(.est-reasons) { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
+      :global(.est-reasons li) { font-size: 0.82rem; color: rgba(255,255,255,0.8); padding-left: 16px; position: relative; }
+      :global(.est-reasons li)::before { content: '–'; position: absolute; left: 0; color: var(--accent); }
+      :global(.est-note) { font-size: 0.82rem; color: rgba(255,255,255,0.75); margin: 0 0 14px; }
+      #panelCta { border-color: var(--accent); }
+      .estimate-disclaimer { font-size: 0.72rem; color: rgba(255,255,255,0.5); border-top: 1px solid rgba(255,255,255,0.15); margin-top: 16px; padding-top: 12px; }
+
+      /* ---------- mobiele sticky prijsbalk ---------- */
+      .mobile-bar {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        background: var(--ink); color: #fff;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        box-shadow: 0 -6px 24px rgba(26,26,26,0.18);
+      }
+      .mobile-bar[hidden] { display: none; }
+      .mobile-bar :global(b) { font-size: 1.05rem; }
+      .mobile-bar .btn { padding: 10px 18px; font-size: 0.9rem; }
+      @media (min-width: 960px) { .mobile-bar { display: none; } }
+
+      /* ---------- explainer ---------- */
+      .explainer-card { display: grid; gap: 26px; }
+      @media (min-width: 820px) { .explainer-card { grid-template-columns: 1.2fr 1fr; align-items: center; gap: 40px; padding: 36px; } }
+      .explainer-card h2 { font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin: 8px 0 12px; }
+      .explainer-card p { color: var(--ink-soft); margin: 0; }
+      .takeover { list-style: none; margin: 0; padding: 20px 22px; display: grid; gap: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; }
+      .takeover li { color: var(--ink-soft); font-size: 0.95rem; }
+      .takeover li b { color: var(--ink); font-size: 0.85rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+
+      /* ---------- fotostrip ---------- */
+      .strip-section { padding-top: 0; }
+      .photo-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      @media (min-width: 720px) { .photo-strip { grid-template-columns: repeat(4, 1fr); } }
+      .strip-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 10px 6px; box-shadow: var(--shadow-soft); }
+      .tilt-0 { transform: rotate(-2deg); }
+      .tilt-1 { transform: rotate(1.5deg); }
+      .tilt-2 { transform: rotate(-1deg); }
+      .tilt-3 { transform: rotate(2deg); }
+      .strip-card figcaption { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); text-align: center; padding: 8px 0 4px; }
+      .strip-note { text-align: center; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin-top: 18px; }
+
+      /* ---------- model grid ---------- */
+      .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      @media (min-width: 620px) { .model-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (min-width: 900px) { .model-grid { grid-template-columns: repeat(4, 1fr); } }
+      .model-card { font: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font-size: 0.92rem; font-weight: 500; transition: border-color .12s ease, transform .12s ease; }
+      .model-card:hover { border-color: var(--ink); transform: translateY(-2px); }
+      .model-ico { color: var(--accent); font-size: 0.9rem; }
+      .model-card:nth-child(4n+2) .model-ico { color: var(--pop-cerulean-ink); }
+      .model-card:nth-child(4n+3) .model-ico { color: var(--pop-coral); }
+      .model-card:nth-child(4n+4) .model-ico { color: var(--pop-yellow-ink); }
+      .also { text-align: center; color: var(--muted); margin-top: 20px; font-size: 0.95rem; }
+
+      /* ---------- factors ---------- */
+      .factor-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+      @media (min-width: 620px) { .factor-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 900px) { .factor-grid { grid-template-columns: repeat(5, 1fr); } }
+      .factor h3 { font-size: 1.05rem; margin-bottom: 8px; }
+      .factor p { color: var(--ink-soft); font-size: 0.9rem; margin: 0; }
+
+      /* ---------- warning (amber) ---------- */
+      .warning { display: flex; gap: 16px; align-items: flex-start; background: var(--warn-bg); border-color: var(--warn-line); }
+      .warning-ico { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--warn-ink); color: #fff; font-weight: 800; }
+      .warning p { margin: 4px 0 0; color: var(--warn-ink); font-weight: 500; }
+
+      /* ---------- examples ---------- */
+      .example-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+      @media (min-width: 620px) { .example-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 960px) { .example-grid { grid-template-columns: repeat(3, 1fr); } }
+      .example h3 { font-size: 1.05rem; }
+      .example.accent { border-color: var(--accent); box-shadow: 0 8px 24px rgba(255,107,181,0.14); }
+      .example.warn { border-color: var(--warn-line); background: var(--warn-bg); }
+      .ex-meta { color: var(--ink-soft); font-size: 0.88rem; margin: 6px 0 16px; }
+      .ex-buy { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--ink); color: #fff; }
+      .ex-buy span { font-size: 0.8rem; color: rgba(255,255,255,0.75); }
+      .ex-buy b { font-size: 1.05rem; white-space: nowrap; }
+      .ex-buy.ex-warn { background: transparent; border: 1px solid var(--warn-line); color: var(--warn-ink); }
+      .ex-buy.ex-warn span { color: var(--warn-ink); }
+      .ex-buy.ex-warn b { font-size: 0.9rem; white-space: normal; text-align: right; }
+
+      /* ---------- why ---------- */
+      .why-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+      @media (min-width: 620px) { .why-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 900px) { .why-grid { grid-template-columns: repeat(3, 1fr); } }
+      .why-item { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-weight: 500; }
+      .why-item span { display: grid; place-items: center; width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); font-size: 0.85rem; }
+
+      /* ---------- final cta ---------- */
+      .final-inner { background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: 48px 28px; text-align: center; position: relative; overflow: hidden; }
+      .final-inner::before { content: '◍ ▣ ✦ ◍ ▣ ✦'; position: absolute; top: 12px; left: 0; right: 0; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: rgba(255,255,255,0.12); letter-spacing: 0.5em; }
+      .final-inner h2 { font-size: clamp(1.6rem, 4.5vw, 2.4rem); margin-bottom: 12px; }
+      .final-inner p { color: rgba(255,255,255,0.8); max-width: 48ch; margin: 0 auto 24px; }
+
+      /* ---------- faq ---------- */
+      .narrow { max-width: 760px; }
+      .faq-list { display: grid; gap: 10px; }
+      .faq-item { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px; }
+      .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; list-style: none; padding: 16px 0; font-weight: 600; }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-plus { transition: transform .2s ease; color: var(--accent); font-size: 1.2rem; }
+      .faq-item[open] .faq-plus { transform: rotate(45deg); }
+      .faq-item p { margin: 0 0 18px; color: var(--ink-soft); }
+
+      /* ---------- footer ---------- */
+      .site-footer { border-top: 1px solid var(--line); background: #fff; padding: 40px 0 28px; margin-top: 20px; }
+      .footer-inner { display: grid; gap: 24px; }
+      @media (min-width: 720px) { .footer-inner { grid-template-columns: 1fr auto; align-items: center; } }
+      .footer-brand strong { font-size: 1.05rem; }
+      .footer-brand p { color: var(--muted); margin: 6px 0 0; font-size: 0.9rem; }
+      .footer-nav { display: flex; flex-wrap: wrap; gap: 18px; }
+      .footer-nav a { text-decoration: none; color: var(--ink-soft); font-size: 0.95rem; }
+      .footer-nav a:hover { color: var(--ink); }
+      .footer-legal { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+      .footer-legal p { color: var(--muted); font-size: 0.8rem; margin: 0; }
+    </style>
+  </body>
+</html>
