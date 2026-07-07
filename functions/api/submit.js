@@ -72,7 +72,7 @@ export async function onRequestPost({ request, env }) {
         });
 
         uploadPromises.push(
-          env.CAMERA_UPLOADS.put(fileName, file.stream(), {
+          env.camera_uploads.put(fileName, file.stream(), {
             httpMetadata: { contentType: file.type }
           })
         );
@@ -82,7 +82,7 @@ export async function onRequestPost({ request, env }) {
     await Promise.all(uploadPromises);
 
     // Sla metadata op
-    await env.CAMERA_UPLOADS.put(
+    await env.camera_uploads.put(
       `${requestId}/metadata.json`,
       JSON.stringify(metadata, null, 2),
       { httpMetadata: { contentType: 'application/json' } }
