@@ -716,18 +716,33 @@ const faqs = [
         mobileBar.hidden = false;
       }
 
-      // Nep-submit (frontend-only)
-      form.addEventListener('submit', (e) => {
+      // Echt submit naar de server
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const data = new FormData(form);
-        const payload = Object.fromEntries(data.entries());
-        payload.accessoires = data.getAll('accessoires');
-        payload.fotos = [...(photoInput.files || [])].map((f) => f.name);
-        Object.assign(payload, state);
-        console.log('[Vintage Camera Inkoop] aanvraag (nog niet verzonden):', payload);
-        form.innerHTML =
-          '<div class="thanks"><span class="thanks-ico">✓</span><h3>Bedankt! We hebben je aanvraag ontvangen.</h3><p>We reageren meestal binnen 24 uur met een eerlijke prijs. Let op je mail of WhatsApp.</p></div>';
-        mobileBar.hidden = true;
+        const fd = new FormData();
+        // Voeg velden toe
+        [...new FormData(form).entries()].forEach(([k, v]) => fd.append(k, v));
+        // Voeg state-waarden toe
+        Object.entries(state).forEach(([k, v]) => { if (v) fd.append(k, v); });
+        // Voeg accessoires als array toe
+        form.querySelectorAll('input[name="accessoires"]:checked').forEach((cb) => fd.append('accessoires', cb.value));
+        // Voeg foto's toe
+        [...(photoInput.files || [])].forEach((f) => fd.append('fotos', f));
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Versturen…'; }
+
+        try {
+          const res = await fetch('/api/submit', { method: 'POST', body: fd });
+          const result = await res.json();
+          if (!result.ok) throw new Error(result.message || 'Versturen mislukt');
+          form.innerHTML =
+            '<div class="thanks"><span class="thanks-ico">✓</span><h3>Bedankt! We hebben je aanvraag ontvangen.</h3><p>We reageren meestal binnen 24 uur met een eerlijke prijs. Let op je mail of WhatsApp.</p></div>';
+          mobileBar.hidden = true;
+        } catch (err) {
+          alert('Er ging iets mis: ' + err.message);
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Verstuur mijn camera'; }
+        }
         form.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
 
