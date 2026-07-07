@@ -101,9 +101,6 @@ const faqs = [
         <div class="wrap hero-inner">
           <div class="hero-top">
             <div class="hero-copy">
-              <span class="eyebrow">
-                <span aria-hidden="true">◍</span> Digitale compactcamera’s · 2000–2012
-              </span>
               <h1>Verkoop je oude digitale camera binnen&nbsp;1&nbsp;minuut</h1>
               <p class="lede">
                 Heb je nog een oude Canon IXUS, Sony Cyber-shot, Fujifilm FinePix of Casio
@@ -116,29 +113,9 @@ const faqs = [
               </div>
             </div>
 
-            <div class="hero-visual" aria-hidden="true">
-              <div class="polaroid">
-                <div class="polaroid-photo">
-                  <svg viewBox="0 0 200 150" width="100%" role="img">
-                    <rect width="200" height="150" rx="8" fill="#f0efe9" />
-                    <rect x="34" y="40" width="132" height="78" rx="8" fill="#1a1a1a" />
-                    <circle cx="100" cy="79" r="26" fill="#2b2b2b" stroke="#555" stroke-width="3" />
-                    <circle cx="100" cy="79" r="15" fill="#0d0d0d" stroke="#00bfff" stroke-width="2" />
-                    <circle cx="93" cy="72" r="4" fill="#666" />
-                    <rect x="44" y="30" width="26" height="8" rx="3" fill="#333" />
-                    <circle cx="150" cy="34" r="4" fill="#ff6bb5" />
-                  </svg>
-                </div>
-                <p class="polaroid-caption">jouw camera → snel weg ✦</p>
-              </div>
-              <span class="sticker sticker-1">◍ Y2K</span>
-              <span class="sticker sticker-2">100% eerlijk</span>
-            </div>
-          </div>
-
-          <!-- ============ CAMERA CHECK FORM ============ -->
-          <section id="check" class="check hero-check">
-            <div class="check-grid">
+            <!-- ============ CAMERA CHECK FORM ============ -->
+            <section id="check" class="check hero-check">
+              <div class="check-grid">
               <form id="cameraForm" class="card check-form" novalidate>
                   <!-- ---------- STAP 1 ---------- -->
                   <div class="form-step">
@@ -275,8 +252,9 @@ const faqs = [
                     Dit is een grove schatting. De definitieve prijs bepalen we na onze check.
                   </p>
               </aside>
-            </div>
-          </section>
+              </div>
+            </section>
+          </div>
 
           <div class="hero-footer">
             <a href="#modellen" class="btn btn-ghost btn-lg">Welke camera’s zoeken jullie?</a>
@@ -768,27 +746,20 @@ const faqs = [
       }
 
       /* ---------- hero ---------- */
-      .hero { padding-top: 32px; }
-      .hero-inner { display: grid; gap: 28px; }
-      .hero-top { display: grid; gap: 28px; align-items: center; }
+      .hero { padding-top: 18px; }
+      .hero-inner { display: grid; gap: 18px; }
+      .hero-top { display: grid; gap: 18px; align-items: start; }
       @media (min-width: 900px) {
-        .hero { padding-top: 56px; }
-        .hero-top { grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr); gap: 56px; }
+        .hero { padding-top: 28px; }
+        .hero-top { grid-template-columns: minmax(320px, 0.78fr) minmax(520px, 1.22fr); gap: 28px; }
       }
       .hero h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); margin: 4px 0 0; }
-      .lede { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--ink-soft); max-width: 44ch; margin: 18px 0 20px; }
-      .hero-footer { display: grid; gap: 16px; justify-items: start; }
+      .lede { font-size: clamp(1rem, 2vw, 1.16rem); color: var(--ink-soft); max-width: 38ch; margin: 12px 0 14px; }
+      .hero-copy { max-width: 34rem; }
+      .hero-footer { display: grid; gap: 12px; justify-items: start; }
       .hero-chips { gap: 8px; }
-      .hero-chips .chip { font-size: 0.82rem; padding: 7px 12px; }
-      .hero-honest { margin: 0; padding: 16px 18px; background: #fff; border: 1px dashed var(--line); border-radius: var(--radius); font-size: 0.92rem; color: var(--ink-soft); max-width: 58ch; }
-
-      .hero-visual { position: relative; display: grid; place-items: center; min-height: 220px; }
-      .polaroid { background: #fff; padding: 14px 14px 8px; border-radius: 12px; box-shadow: var(--shadow); transform: rotate(-3deg); width: min(320px, 82%); border: 1px solid var(--line); }
-      .polaroid-photo { border-radius: 8px; overflow: hidden; }
-      .polaroid-caption { font-family: var(--font-mono); font-size: 0.8rem; text-align: center; color: var(--ink-soft); margin: 10px 0 4px; }
-      .sticker { position: absolute; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 6px 10px; border-radius: 999px; box-shadow: var(--shadow-soft); }
-      .sticker-1 { top: 8px; right: 6%; background: var(--pop-yellow); color: var(--ink); transform: rotate(6deg); }
-      .sticker-2 { bottom: 10px; left: 4%; background: var(--pop-cerulean); color: #fff; transform: rotate(-5deg); }
+      .hero-chips .chip { font-size: 0.8rem; padding: 6px 10px; }
+      .hero-honest { margin: 0; padding: 12px 14px; background: #fff; border: 1px dashed var(--line); border-radius: var(--radius); font-size: 0.88rem; color: var(--ink-soft); max-width: 58ch; }
 
       /* ---------- steps ---------- */
       .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
@@ -809,10 +780,10 @@ const faqs = [
       /* ---------- check form ---------- */
       .check { scroll-margin-top: 96px; }
       .hero-check { margin-top: 0; }
-      .check-grid { display: grid; gap: 24px; align-items: start; }
-      @media (min-width: 960px) { .check-grid { grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr); } }
-      .check-form { display: grid; gap: 20px; }
-      .form-step { display: grid; gap: 20px; }
+      .check-grid { display: grid; gap: 16px; align-items: start; }
+      @media (min-width: 1280px) { .check-grid { grid-template-columns: minmax(0, 1.22fr) minmax(260px, 0.78fr); } }
+      .check-form { display: grid; gap: 14px; padding: 18px; }
+      .form-step { display: grid; gap: 14px; }
       .form-step.step2 { border-top: 1.5px dashed var(--line); padding-top: 22px; }
       .step-label { margin: 0; font-size: 0.85rem; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: baseline; gap: 10px; }
       .step-label b { color: var(--accent-ink); }
@@ -826,19 +797,19 @@ const faqs = [
       .field select:invalid { color: var(--muted); }
       .field #merkOverig { margin-top: 8px; }
       .field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
-      .field-row { display: grid; gap: 16px; }
+      .field-row { display: grid; gap: 12px; }
       @media (min-width: 560px) { .field-row { grid-template-columns: 1fr 1fr; } .field-row.three { grid-template-columns: 1fr 1fr 1fr; } }
       .hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
 
       .segmented { display: flex; flex-wrap: wrap; gap: 8px; }
       .segmented.wrap-seg button { flex: 1 1 auto; }
       .segmented button {
-        font: inherit; cursor: pointer; padding: 10px 14px; border-radius: 999px;
+        font: inherit; cursor: pointer; padding: 9px 12px; border-radius: 999px;
         border: 1px solid var(--line); background: #fff; color: var(--ink-soft); transition: all .12s ease;
       }
       .segmented.sm { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
       .segmented.sm.two { grid-template-columns: 1fr 1fr; }
-      .segmented.sm button { padding: 10px 6px; text-align: center; }
+      .segmented.sm button { padding: 9px 6px; text-align: center; }
       .segmented button:hover { border-color: var(--ink); }
       .segmented button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 
@@ -869,7 +840,7 @@ const faqs = [
       :global(.thanks-ico) { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); font-size: 1.5rem; margin-bottom: 12px; }
 
       /* ---------- estimate panel ---------- */
-      .estimate { position: sticky; top: 84px; background: var(--ink); color: #fff; border-color: var(--ink); }
+      .estimate { position: sticky; top: 76px; background: var(--ink); color: #fff; border-color: var(--ink); padding: 18px; }
       .estimate .eyebrow { background: rgba(255,255,255,0.12); color: #fff; }
       .estimate-empty { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
       :global(.est-headline) { font-weight: 700; margin: 4px 0 0; }
@@ -895,7 +866,7 @@ const faqs = [
       .mobile-bar :global(b) { font-size: 1.05rem; }
       .mobile-bar .btn { padding: 10px 18px; font-size: 0.9rem; }
       @media (min-width: 960px) { .mobile-bar { display: none; } }
-      @media (max-width: 640px) { .hero { padding-top: 22px; } .hero-visual { display: none; } .hero-inner { gap: 20px; } }
+      @media (max-width: 640px) { .hero { padding-top: 14px; } .hero-inner { gap: 16px; } .hero-footer .btn { width: 100%; } }
 
       /* ---------- explainer ---------- */
       .explainer-card { display: grid; gap: 26px; }
