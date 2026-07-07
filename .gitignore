@@ -3,5 +3,6 @@ dist/
 .astro/
 .claude/
 .wrangler/
+.dev.vars
 *.local
 *.log

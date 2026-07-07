@@ -15,9 +15,44 @@ const ROUTES = [
   { method: 'GET', path: '/api/foto-7kq4m9', handler: fotoGet },
 ];
 
+// Routes met persoonsgegevens/foto's — vereisen HTTP Basic Auth.
+// Wachtwoord staat NIET in de repo: zet 'm als Worker secret (zie HANDOFF.md).
+const PROTECTED_PATHS = new Set(['/api/inzendingen-7kq4m9', '/api/foto-7kq4m9']);
+
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+function isAuthorized(request, env) {
+  if (!env.DASHBOARD_PASSWORD) return false; // fail closed als secret ontbreekt
+  const header = request.headers.get('Authorization') || '';
+  if (!header.startsWith('Basic ')) return false;
+  try {
+    const [, password] = atob(header.slice(6)).split(':');
+    return timingSafeEqual(password || '', env.DASHBOARD_PASSWORD);
+  } catch {
+    return false;
+  }
+}
+
+function unauthorized() {
+  return new Response('Authenticatie vereist', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="Vintage Camera Inkoop dashboard"' },
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
+
+    if (PROTECTED_PATHS.has(pathname) && !isAuthorized(request, env)) {
+      return unauthorized();
+    }
+
     const route = ROUTES.find((r) => r.method === request.method && r.path === pathname);
     if (route) return route.handler({ request, env, ctx });
     return env.ASSETS.fetch(request);

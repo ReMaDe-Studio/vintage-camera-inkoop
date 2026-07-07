@@ -71,18 +71,38 @@ Getest lokaal met `wrangler dev` (Miniflare, gesimuleerde R2 — raakt de echte
 bucket niet aan): formulier-submit, dashboard-lijst en foto-proxy werken alle
 drie end-to-end. Zie `npm run wrangler:dev` (draait op poort 8788).
 
+### Dashboard-beveiliging (HTTP Basic Auth)
+
+`/api/inzendingen-7kq4m9` en `/api/foto-7kq4m9` waren alleen verborgen via een
+niet-geraden URL — geen echte beveiliging, terwijl ze namen, telefoonnummers,
+e-mailadressen en foto's van aanvragers tonen. **Gefixt**: beide routes
+vereisen nu HTTP Basic Auth (browser toont automatisch een wachtwoordprompt),
+gecheckt in [src/worker.js](src/worker.js) tegen de Worker-secret
+`DASHBOARD_PASSWORD`. `/api/submit` (het publieke formulier) blijft open.
+**Fail-closed**: ontbreekt de secret, dan geeft elk verzoek 401 — er is geen
+manier om per ongeluk zonder wachtwoord live te gaan.
+
+Lokaal: kopieer [.dev.vars.example](.dev.vars.example) naar `.dev.vars`
+(gitignored) en vul een wachtwoord in; `wrangler dev` leest dat automatisch.
+
 **Nog te doen door jou (ik kan dit niet vanaf hier uitvoeren):**
 
-1. **Deployen**: `wrangler` is hier niet ingelogd. Run lokaal:
+1. **Zet het wachtwoord als Worker secret** (één keer, vóór de eerste deploy
+   met deze fix):
    ```
    cd vintage-camera-inkoop
    npx wrangler login          # eenmalig, opent browser
+   npx wrangler secret put DASHBOARD_PASSWORD
+   ```
+   Kies een sterk wachtwoord — dit beschermt echte klantgegevens.
+2. **Deployen**:
+   ```
    npm run build
    npx wrangler deploy
    ```
-   Daarna zou `/api/inzendingen-7kq4m9` en het formulier moeten werken op de
-   live URL.
-2. **⚠️ Beveiligingsissue — GitHub-token in git remote**: `git remote -v` toont
+   Daarna zou `/api/inzendingen-7kq4m9` een wachtwoordprompt moeten tonen en
+   `/api/submit` gewoon moeten werken op de live URL.
+3. **⚠️ Beveiligingsissue — GitHub-token in git remote**: `git remote -v` toont
    een Personal Access Token in platte tekst in de origin-URL
    (`https://ghp_...@github.com/...`). Dat token staat lokaal in `.git/config`
    op deze machine. Aanbevolen: vervang de remote door een SSH-URL of een
@@ -90,14 +110,8 @@ drie end-to-end. Zie `npm run wrangler:dev` (draait op poort 8788).
    settings → Personal access tokens) aangezien het nu in leesbare vorm heeft
    rondgezworven. Ik heb het zelf niet aangepast omdat een remote-wijziging
    je push-toegang kan beïnvloeden.
-3. **Dashboard heeft geen beveiliging** — `/api/inzendingen-7kq4m9` is alleen
-   verborgen via een niet-geraden URL, niet echt afgeschermd. Bevat namen,
-   telefoonnummers, e-mailadressen en foto's van aanvragers. Overweeg
-   basic-auth (wachtwoord via een Worker secret/env var) voordat dit met
-   substantieel verkeer live gaat.
-4. `.wrangler/` (lokale Miniflare-state van `wrangler dev`) staat nu in
-   `.gitignore` — was dat nog niet en zou anders lokale testdata in de repo
-   hebben laten belanden.
+4. `.wrangler/` (lokale Miniflare-state van `wrangler dev`) en `.dev.vars`
+   (lokaal wachtwoord) staan nu in `.gitignore` — waren dat nog niet.
 
 ## Architectuur
 
