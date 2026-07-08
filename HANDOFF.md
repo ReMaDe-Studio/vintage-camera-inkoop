@@ -99,13 +99,23 @@ Pages-Functions bestandsrouting werkt niet in een Worker-met-assets):
 4. Noteer je **Base ID**: staat in de URL van je base (`https://airtable.com/appXXXXXXXX/...`)
    of via airtable.com/developers/web/api → kies je base.
 
-**B. De 3 waarden in Cloudflare zetten (via klikken, geen command-line)**
-   Cloudflare-dashboard → Workers & Pages → `vintage-camera-inkoop` → Settings →
-   Variables and Secrets → voeg toe:
-   - `AIRTABLE_TOKEN` = je `pat...`-token → zet op **Encrypt** (Secret).
-   - `AIRTABLE_BASE_ID` = je `app...`-id (gewone variabele mag).
-   - `AIRTABLE_TABLE` = `Aanmeldingen` (gewone variabele).
-   Klik **Deploy** / Save.
+**B. Waarden instellen**
+   `AIRTABLE_BASE_ID` en `AIRTABLE_TABLE` zijn **niet geheim** en staan vast in
+   [wrangler.toml](wrangler.toml) (`[vars]`-sectie) — die hoef je nergens meer
+   in te vullen, ze horen bij de code en gaan automatisch mee bij elke deploy.
+
+   Alleen `AIRTABLE_TOKEN` is geheim en moet je zelf zetten:
+   Cloudflare-dashboard → Workers & Pages → `vintage-camera-inkoop2` (**mét de
+   2**) → Settings → Variables and Secrets → `AIRTABLE_TOKEN` = je
+   `pat...`-token → type **Secret** (encrypted).
+
+   > **Waarom niet alle 3 via het dashboard?** Dat hebben we eerst geprobeerd
+   > en gaf een hardnekkige 503-fout ("Aanmelden lukt nu even niet") ondanks
+   > dat de dashboard-pagina de waarden correct liet zien. Deze Worker deployt
+   > automatisch vanuit GitHub via `wrangler.toml`, en niet-geheime
+   > dashboard-only variabelen bleken daarbij niet betrouwbaar door te komen
+   > naar de live Worker. Vandaar: niet-geheime waarden in `wrangler.toml`
+   > (in git, dus altijd aanwezig), alleen het echte geheim in het dashboard.
 
 **C. De nieuwe code live zetten**
    De codewijziging (Airtable i.p.v. het oude dashboard) moet nog gedeployed

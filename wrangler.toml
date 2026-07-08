@@ -9,3 +9,11 @@ binding = "ASSETS"
 [[r2_buckets]]
 binding = "camera_uploads"
 bucket_name = "camera-uploads"
+
+# Niet-geheime waarden staan hier vast in de code, zodat ze nooit per ongeluk
+# ontbreken na een nieuwe deploy. AIRTABLE_TOKEN is wél geheim en blijft
+# uitsluitend in het Cloudflare-dashboard (Settings > Variables and Secrets,
+# type "Secret") of via `wrangler secret put AIRTABLE_TOKEN` — nooit hier.
+[vars]
+AIRTABLE_BASE_ID = "appaFHLYf2oxQ7fev"
+AIRTABLE_TABLE = "Aanmeldingen"
