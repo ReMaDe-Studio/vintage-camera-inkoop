@@ -42,76 +42,94 @@ Zoek op `[jouw naam]`, `31600000000` en "placeholder" in de code — dit staat e
 | Bedrijfs-/privacygegevens | footer-legal + privacy-link (`#privacy`) | onderaan index.astro |
 | Echte productfoto's | fotostrip toont nu illustratieve SVG-camera's | `stripCams` array in index.astro, zie hieronder |
 
-> **Bijgewerkt**: er is inmiddels wél een backend (Cloudflare Worker + R2), zie
-> de sectie "Deployment" hieronder. De regel hierboven over "geen backend" in
-> een eerdere versie van dit document klopt niet meer.
-
-## Deployment (Cloudflare Worker + R2)
+## Backend & dashboard (Cloudflare Worker + Airtable)
 
 De site draait als een **Cloudflare Worker met static assets** (niet Cloudflare
-Pages) op `https://vintage-camera-inkoop2.f-p-yousfi.workers.dev/`. Formulier-
-inzendingen (incl. foto's) worden opgeslagen in de R2-bucket `camera-uploads`.
+Pages) op `https://vintage-camera-inkoop2.f-p-yousfi.workers.dev/`.
 
-**Bug gevonden en gefixt (2026-07-08)**: `functions/api/*.js` gebruikt de
-Cloudflare **Pages Functions**-conventie (bestandsnaam-gebaseerde routing,
-`onRequestPost`/`onRequestGet`). Die conventie werkt alléén op Cloudflare
-Pages — een Worker-met-assets leest die map niet automatisch, dus
-`/api/submit`, `/api/inzendingen-7kq4m9` en `/api/foto-7kq4m9` gaven 404 op de
-live URL, terwijl de homepage (static assets) wél werkte.
+**Waar aanvragen heen gaan (bewuste keuze, first principles):** we bouwen zélf
+géén dashboard en géén login meer. Een aanvraag komt binnen bij `/api/submit`
+en wordt als record in **Airtable** gezet. Airtable ís het dashboard: je
+bekijkt aanvragen door in te loggen op airtable.com (of de Airtable-app).
+Beveiliging = Airtable's eigen login (e-mail + wachtwoord + 2FA). Geen
+wachtwoord in code, geen zelfgebouwde auth om te onderhouden.
 
-**Fix**: [src/worker.js](src/worker.js) is de nieuwe Worker-entrypoint
-(`main` in [wrangler.toml](wrangler.toml)). Hij routeert handmatig naar de
-bestaande handlers in `functions/api/*.js` (die blijven ongewijzigd en zijn nu
-gewoon geïmporteerde functies, geen framework-magie meer) en valt voor al het
-overige terug op `env.ASSETS.fetch(request)` om de gebouwde site te serveren.
-`wrangler.toml` kreeg een `binding = "ASSETS"` zodat de Worker die fallback
-kan aanroepen.
+**Flow** (in [functions/api/submit.js](functions/api/submit.js)):
+1. Foto's → opgeslagen in R2-bucket `camera-uploads`.
+2. Backup van alle gegevens → `{{id}}/metadata.json` in R2 (recovery-vangnet:
+   als Airtable faalt, is de aanvraag niet verloren).
+3. Record → Airtable, met de foto's als attachments (via publieke foto-URL's).
+   Als Airtable faalt, krijgt de bezoeker een nette melding om te WhatsappEN;
+   de data staat dan nog veilig in R2.
 
-Getest lokaal met `wrangler dev` (Miniflare, gesimuleerde R2 — raakt de echte
-bucket niet aan): formulier-submit, dashboard-lijst en foto-proxy werken alle
-drie end-to-end. Zie `npm run wrangler:dev` (draait op poort 8788).
+**Routes** (handmatig gerouteerd in [src/worker.js](src/worker.js), want de
+Pages-Functions bestandsrouting werkt niet in een Worker-met-assets):
+- `POST /api/submit` — formulier ontvangen (publiek).
+- `GET /api/foto?file={key}` — serveert een foto uit R2 (publiek; nodig zodat
+  Airtable de foto via URL kan ophalen). Sleutel is een niet-te-raden UUID-pad
+  en de foto's zelf bevatten geen persoonsgegevens.
+- Al het overige → `env.ASSETS.fetch()` (de gebouwde site).
 
-### Dashboard-beveiliging (HTTP Basic Auth)
+### Eenmalige setup die JIJ moet doen (kan ik niet vanaf hier)
 
-`/api/inzendingen-7kq4m9` en `/api/foto-7kq4m9` waren alleen verborgen via een
-niet-geraden URL — geen echte beveiliging, terwijl ze namen, telefoonnummers,
-e-mailadressen en foto's van aanvragers tonen. **Gefixt**: beide routes
-vereisen nu HTTP Basic Auth (browser toont automatisch een wachtwoordprompt),
-gecheckt in [src/worker.js](src/worker.js) tegen de Worker-secret
-`DASHBOARD_PASSWORD`. `/api/submit` (het publieke formulier) blijft open.
-**Fail-closed**: ontbreekt de secret, dan geeft elk verzoek 401 — er is geen
-manier om per ongeluk zonder wachtwoord live te gaan.
+**A. Airtable klaarzetten**
+1. Maak een gratis account op airtable.com en een nieuwe **base**, bv.
+   "Camera Inkoop", met een **tabel** genaamd `Aanmeldingen`.
+2. Geef de tabel exact deze velden (hoofdletters/spelling moeten kloppen — de
+   code stuurt deze namen):
+   `Datum` (Date, met tijd), `Naam` (Single line text), `Telefoon` (Single line
+   text), `E-mail` (Email), `Woonplaats` (Single line text), `Merk` (Single line
+   text), `Model` (Single line text), `Kleur` (Single line text), `Staat`
+   (Single line text of Single select), `Batterij`, `Lader`, `Doos` (elk Single
+   line text), `Accessoires` (Long text), `Foto's` (**Attachment**).
+3. Maak een **Personal Access Token**: airtable.com/create/tokens → scope
+   `data.records:write` → toegang tot jouw base. Kopieer het token (begint met
+   `pat...`).
+4. Noteer je **Base ID**: staat in de URL van je base (`https://airtable.com/appXXXXXXXX/...`)
+   of via airtable.com/developers/web/api → kies je base.
 
-Lokaal: kopieer [.dev.vars.example](.dev.vars.example) naar `.dev.vars`
-(gitignored) en vul een wachtwoord in; `wrangler dev` leest dat automatisch.
+**B. De 3 waarden in Cloudflare zetten (via klikken, geen command-line)**
+   Cloudflare-dashboard → Workers & Pages → `vintage-camera-inkoop` → Settings →
+   Variables and Secrets → voeg toe:
+   - `AIRTABLE_TOKEN` = je `pat...`-token → zet op **Encrypt** (Secret).
+   - `AIRTABLE_BASE_ID` = je `app...`-id (gewone variabele mag).
+   - `AIRTABLE_TABLE` = `Aanmeldingen` (gewone variabele).
+   Klik **Deploy** / Save.
 
-**Nog te doen door jou (ik kan dit niet vanaf hier uitvoeren):**
-
-1. **Zet het wachtwoord als Worker secret** (één keer, vóór de eerste deploy
-   met deze fix):
+**C. De nieuwe code live zetten**
+   De codewijziging (Airtable i.p.v. het oude dashboard) moet nog gedeployed
+   worden. Zoals je de site eerder live zette:
    ```
    cd vintage-camera-inkoop
-   npx wrangler login          # eenmalig, opent browser
-   npx wrangler secret put DASHBOARD_PASSWORD
-   ```
-   Kies een sterk wachtwoord — dit beschermt echte klantgegevens.
-2. **Deployen**:
-   ```
+   npx wrangler login       # eenmalig
    npm run build
    npx wrangler deploy
    ```
-   Daarna zou `/api/inzendingen-7kq4m9` een wachtwoordprompt moeten tonen en
-   `/api/submit` gewoon moeten werken op de live URL.
-3. **⚠️ Beveiligingsissue — GitHub-token in git remote**: `git remote -v` toont
-   een Personal Access Token in platte tekst in de origin-URL
-   (`https://ghp_...@github.com/...`). Dat token staat lokaal in `.git/config`
-   op deze machine. Aanbevolen: vervang de remote door een SSH-URL of een
-   credential helper, en **roteer dit token** in GitHub (Settings → Developer
-   settings → Personal access tokens) aangezien het nu in leesbare vorm heeft
-   rondgezworven. Ik heb het zelf niet aangepast omdat een remote-wijziging
-   je push-toegang kan beïnvloeden.
-4. `.wrangler/` (lokale Miniflare-state van `wrangler dev`) en `.dev.vars`
-   (lokaal wachtwoord) staan nu in `.gitignore` — waren dat nog niet.
+   (Of, als de worker aan GitHub gekoppeld is voor auto-deploy: een `git push`
+   is genoeg — de commit staat al klaar.)
+
+**Testen na deploy:** vul het formulier op de live site in en verstuur. Er
+zou binnen enkele seconden een nieuwe rij in je Airtable-tabel moeten
+verschijnen, met de foto's erbij. (Lokaal testen tegen Airtable kan niet
+volledig: Airtable kan `localhost` niet bereiken om de foto's op te halen —
+dat werkt pas op de publieke live-URL.)
+
+### Nog een openstaand beveiligingspunt (los van bovenstaande)
+
+**⚠️ GitHub-token in git remote**: `git remote -v` toont een Personal Access
+Token in platte tekst in de origin-URL (`https://ghp_...@github.com/...`),
+lokaal in `.git/config`. Aanbevolen: vervang de remote door SSH of een
+credential helper, en **roteer dit token** in GitHub. Niet zelf aangepast omdat
+een remote-wijziging je push-toegang kan raken.
+
+### Lokaal ontwikkelen met de backend
+
+Kopieer [.dev.vars.example](.dev.vars.example) → `.dev.vars` (staat in
+`.gitignore`) en vul je Airtable-gegevens in. Dan:
+```
+npm run wrangler:dev     # draait de Worker lokaal op poort 8788
+```
+`.wrangler/` (lokale Miniflare-state) en `.dev.vars` staan in `.gitignore`.
 
 ## Architectuur
 

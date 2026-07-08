@@ -1,1 +1,7 @@
-DASHBOARD_PASSWORD=kies-hier-een-eigen-wachtwoord
+# Kopieer dit bestand naar .dev.vars (staat in .gitignore) en vul je eigen
+# Airtable-gegevens in voor lokaal testen met `npm run wrangler:dev`.
+# In productie zet je deze 3 waarden in het Cloudflare-dashboard
+# (Workers & Pages > je worker > Settings > Variables). Zie HANDOFF.md.
+AIRTABLE_TOKEN=pat_je-airtable-personal-access-token
+AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
+AIRTABLE_TABLE=Aanmeldingen
