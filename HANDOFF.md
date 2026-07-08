@@ -47,6 +47,17 @@ Zoek op `[jouw naam]`, `31600000000` en "placeholder" in de code — dit staat e
 De site draait als een **Cloudflare Worker met static assets** (niet Cloudflare
 Pages) op `https://vintage-camera-inkoop2.f-p-yousfi.workers.dev/`.
 
+> ⚠️ **Let op de naam**: de Worker heet `vintage-camera-inkoop2` (mét de "2").
+> `wrangler.toml` gebruikte eerder `vintage-camera-inkoop` (zónder 2), waardoor
+> een los, niet-live duplicaat-Worker ontstond in het Cloudflare-account. Dat
+> kostte een debug-sessie: env-variabelen die op het duplicaat werden gezet
+> kwamen nooit aan bij de échte, live Worker. Gefixt door `name` in
+> `wrangler.toml` gelijk te trekken aan `vintage-camera-inkoop2`. **Check altijd
+> dat je in het Cloudflare-dashboard de Worker met exact deze naam bewerkt** —
+> niet een gelijkende naam zonder de "2". Het oude duplicaat
+> (`vintage-camera-inkoop`) mag je desgewenst verwijderen in Cloudflare, dat is
+> geen actieve site.
+
 **Waar aanvragen heen gaan (bewuste keuze, first principles):** we bouwen zélf
 géén dashboard en géén login meer. Een aanvraag komt binnen bij `/api/submit`
 en wordt als record in **Airtable** gezet. Airtable ís het dashboard: je
